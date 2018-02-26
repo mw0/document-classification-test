@@ -25,6 +25,7 @@ CANCELLATION NOTICE,641356219cbc f95d0bea231b ... [lots more words] ... 52102c70
 
 The first field is the document label. Everything after the comma is a space delimited set of word values.
 
+Here is the dataset in google drive, you will need to request access: https://drive.google.com/open?id=1rY8jMUZ_QCRzqHk82cCTy8OWA6suQOqm
 
 ### Your Mission
 
@@ -53,3 +54,4 @@ Webservice spec:
 - Discoverable from root path
 - URL encoded GET parameter "words" returns predicted document type (confidence is a bonus) in field "prediction" and "confidence"
 - HTML pages should be readable by a human and allow for action, aka input field and submit buttons etc.
+- Even a broken clock is right twice a day. A working webservice is a good first goal. It could return the highest likelihood doc class.
