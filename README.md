@@ -31,18 +31,20 @@ Here is the dataset in google drive, you will need to request access: https://dr
 
 Should you choose to accept it ...
 
-Train a document classification model. Deploy your model to a public cloud platform (AWS/Google/Azure/Heroku) as a webservice, send us an email with the URL to you github repo and the URL of you model. Also, we use AWS so we are partial to you using that ... just saying.
+Train a document classification model. Deploy your model to a public cloud platform (AWS/Google/Azure/Heroku) as a webservice, send us an email with the URL to you github repo, the URL of your publicly deployed service so we can submit test cases and a recorded screen cast demo of your solution's UI, its code and deployment steps. Also, we use AWS so we are partial to you using that ... just saying.
 
 
 ### Measurement Criteria
 
-We will measure your solution on the following criteria, if we like what you have produced we will ask you for a code review to discuss your thinking:
+We will measure your solution on the following criteria:
 
   1. Does your webservice work?
   1. Is your hosted model as accurate as ours? Better? (think confusion matrix)
   1. Your code, is it understandable, readable and/or deployable?
   1. Do you use industry best practices in training/testing/deploying?
-  1. Do you use modern packages/tools in your code and deployment?
+  1. Do you use modern packages/tools in your code and deployment pipeline like [this](https://stelligent.com/2016/02/08/aws-lambda-functions-aws-codepipeline-cloudformation/)?
+  1. The effectiveness of your demo, did you frame the problem and your approach to a solution, did you explain your thinking and any remaining gaps, etc?
+  1. Are we able to run your testcases against your webservice? Can we run them against our webservice?
 
 
 ### A few more details
