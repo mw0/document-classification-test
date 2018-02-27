@@ -25,7 +25,7 @@ CANCELLATION NOTICE,641356219cbc f95d0bea231b ... [lots more words] ... 52102c70
 
 The first field is the document label. Everything after the comma is a space delimited set of word values.
 
-Here is the dataset in google drive, you will need to request access: https://drive.google.com/open?id=1rY8jMUZ_QCRzqHk82cCTy8OWA6suQOqm
+The dataset is included as part of this repo.
 
 ### Your Mission
 
