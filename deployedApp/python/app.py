@@ -28,6 +28,7 @@ def memoize(f):
 def index():
     body_dict = request.get_json(silent=True)
     data = body_dict['data']
+    print("data:\n", data)
 
     prediction = predict(data)
 
@@ -35,13 +36,15 @@ def index():
     return json.dumps(result)
 
 
-@memoize
+# @memoize
 def load_model(key):
     response = S3.get_object(Bucket=BUCKET_NAME, Key=key)
     model_str = response['Body'].read()
+    print(f"model_str: {model_str}")
 
     # model = pickle.loads(model_str)
     model = load(model_str)
+    print(type(model))
 
     return model
 
