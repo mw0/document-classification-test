@@ -1,15 +1,15 @@
-# -*- coding: utf-8 -*-
-
-from flask import Flask, request, json
+from flask import Flask
+from flask import request
+from flask import json
 import boto3
-from joblib import load
+import pickle
 
-BUCKET_NAME = 'blackknight'
-DATA_TRANSFORMER_NAME = 'tfidfVectorizer.pkl'
-MODEL_FILE_NAME = 'ComplementNaiveBayes0.pkl'
+BUCKET_NAME = 'serverless-machine-learning'
+MODEL_FILE_NAME = 'model.pkl'
 
 app = Flask(__name__)
-S3 = boto3.client('s3', region_name='us-east-1')
+
+S3 = boto3.client('s3', region_name='eu-central-1')
 
 
 def memoize(f):
@@ -25,22 +25,12 @@ def memoize(f):
 
 @app.route('/', methods=['POST'])
 def index():
-    # Parse request body for model input
     body_dict = request.get_json(silent=True)
     data = body_dict['data']
 
-    # Load tfidfVectorizer
-    tfidf = load_model(DATA_TRANSFORMER_NAME)
+    prediction = predict(data)
 
-    # Load model
-    model = load_model(MODEL_FILE_NAME)
-
-    # Make prediction
-    prediction = model.predict(data).tolist()
-
-    # Respond with prediction result
     result = {'prediction': prediction}
-
     return json.dumps(result)
 
 
@@ -49,7 +39,7 @@ def load_model(key):
     response = S3.get_object(Bucket=BUCKET_NAME, Key=key)
     model_str = response['Body'].read()
 
-    model = load(model_str)
+    model = pickle.loads(model_str)
 
     return model
 
