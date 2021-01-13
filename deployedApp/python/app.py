@@ -4,8 +4,8 @@ from flask import json
 import boto3
 import pickle
 
-BUCKET_NAME = 'serverless-machine-learning'
-MODEL_FILE_NAME = 'model.pkl'
+BUCKET_NAME = 'blackknight'
+MODEL_FILE_NAME = 'GradientBoostBest.pkl'
 
 app = Flask(__name__)
 
