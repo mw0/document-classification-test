@@ -5,8 +5,8 @@ from __future__ import print_function
 
 import os
 import json
-import pickle
-from io import StringIO
+# import pickle
+# from io import StringIO
 import sys
 import signal
 import traceback
@@ -16,49 +16,42 @@ import json
 
 import flask
 
-import pandas as pd
-import numpy as np
+# import pandas as pd
+# import numpy as np
 
-prefix = '/opt/ml/'
-model_path = os.path.join(prefix, 'model')
+# prefix = '/opt/ml/'
+# prefix = './model'
+# model_path = os.path.join(prefix, 'model')
 
 BUCKET_NAME = 'blackknight'
 MODEL_FILE_NAME = 'GradientBoostBest.pkl'
 TFIDF_FILE_NAME = 'tfidfVectorizer.pkl'
 
+print("b")
 S3 = boto3.client('s3', region_name='us-west-1')
 
 
-def prediction(data, model, clf):
+def prediction(data, vectorizer, classifier):
     """ Calculate test dataset accuracy.
     Args:
-        data (DataFrame): Contains labels and sentences
-        model (dict): Contains word embeddings into vectors
-        clf (object): A classification model
+        data		list(type=str): each string having hashed tokens, 
+                          representing a document
+        vectorizer	tfidfVectorizer: object for transforming strings
+        classifier	sklearn model: classifier for strings
+
     Returns:
-        test_acc (scalar): Test accuracy value
+        docClass	str: the selected class
     """
 
-    prediction = []
+    X = None
     try:
-        data = data.split()
+        X = vectorizer.transform(data)
     except:
-        print('Could not split the data: {}'.format(data))
-        return prediction
+        print(f'Could not vectorize:\n{data[0]} ...')
 
 
-    features = []
-    for index_word in data:
-        try:
-            # If a word encoding does not exist
-            # skip it
-            features.append(model[index_word])
-        except:
-            continue
-    if features:
-        mean_features = np.mean(np.array(features), axis=0)
-        prediction = clf.predict([mean_features])
-
+    if X:
+        prediction = classifier.predict(X)
 
     return prediction
 
@@ -67,7 +60,8 @@ def prediction(data, model, clf):
 # input data.
 
 class ScoringService(object):
-    model = None                # Where we keep the model when it's loaded
+    vectorizer = None		# Where we keep vectorizer
+    classifier = None		# Where we keep classifier
 
     @classmethod
     def get_tfidfVectorizer(self, key):
@@ -88,10 +82,10 @@ class ScoringService(object):
             # with open(os.path.join(model_path, 'text-model.pkl'), 'rb') as inp:
             #     self.model = pickle.load(inp)
 
-        return self.model
+        return self.vectorizer
 
     @classmethod
-    def get_model(self, key):
+    def get_classifier(self, key):
         """
         Get the model object for this instance, loading it if it's not
         already loaded.
@@ -121,7 +115,7 @@ class ScoringService(object):
             predictions. There will be one prediction per row in the dataframe.
         """
         tfidf = self.get_tfidfVectorizer(TFIDF_FILE_NAME)
-        model = self.get_model(MODEL_FILE_NAME)
+        model = self.get_classifier(MODEL_FILE_NAME)
 
         predicted_label = []
         try:
@@ -149,7 +143,8 @@ def ping():
     """
 
     # You can insert a health check here
-    health = ScoringService.get_model() is not None
+    health = ((ScoringService.get_vectorizer() is not None) and
+              (ScoringService.get_classifier() is not None))
 
     status = 200 if health else 404
     return flask.Response(response='\n', status=status,
@@ -159,28 +154,24 @@ def ping():
 def transformation():
     """
     Do an inference on a single batch of data. In this sample server, we take
-    data as CSV, convert it to a pandas data frame for internal use and then
-    convert the predictions back to CSV (which really just means one
-    prediction per line, since there's a single column.
+    data as list of strings of tokens. If only one string, create a list of
+    length 1.
     """
 
     data = None
 
-    # Convert from CSV to pandas
-    if flask.request.content_type == 'text/csv':
-        data = flask.request.data.decode('utf-8')
-        s = StringIO(data)
-        data = pd.read_csv(s,
-                           sep=",",
-                           quotechar='"',
-                           names=['sentence'],
-                           skipinitialspace=True,
-                           encoding='utf-8',
-                           header=None)
+    # 
+    if flask.request.content_type == 'application/json':
+        data = flask.jsonify(flask.request.json)
+        # data = flask.request.data.decode('utf-8')
+        # data = json.loads(request.get_data().decode("utf-8"))
+        print("data:\n", data)
     else:
-        return flask.Response(response='This predictor only supports CSV data', status=415, mimetype='text/plain')
+        return flask.Response(response=('This predictor only supports '
+                                        'JSON data'),
+                              status=415, mimetype='text/plain')
 
-    print('Invoked with {} records'.format(data.shape[0]))
+    print(f'Invoked with {len(data)} records')
 
     # Do the prediction
     predictions = ScoringService.predict(data)
@@ -196,3 +187,6 @@ def transformation():
     result = out.getvalue()
 
     return flask.Response(response=result, status=200, mimetype='text/csv')
+
+if __name__ == "__main__":
+    print("a")
