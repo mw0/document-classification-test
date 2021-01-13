@@ -9,7 +9,7 @@ MODEL_FILE_NAME = 'GradientBoostBest.pkl'
 
 app = Flask(__name__)
 
-S3 = boto3.client('s3', region_name='eu-central-1')
+S3 = boto3.client('s3', region_name='us-west-1')
 
 
 def memoize(f):
