@@ -3,6 +3,7 @@ from flask import request
 from flask import json
 import boto3
 from joblib import load
+import pickle
 
 BUCKET_NAME = 'blackknight'
 MODEL_FILE_NAME = 'GradientBoostBest.pkl'
