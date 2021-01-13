@@ -3,7 +3,7 @@ from flask import request
 from flask import json
 import boto3
 from joblib import load
-import pickle
+# import pickle
 
 BUCKET_NAME = 'blackknight'
 MODEL_FILE_NAME = 'GradientBoostBest.pkl'
@@ -40,8 +40,8 @@ def load_model(key):
     response = S3.get_object(Bucket=BUCKET_NAME, Key=key)
     model_str = response['Body'].read()
 
-    model = pickle.loads(model_str)
-    # model = load(model_str)
+    # model = pickle.loads(model_str)
+    model = load(model_str)
 
     return model
 
