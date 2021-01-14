@@ -121,11 +121,6 @@
   600  bg
   601  emacs -nw requirements.txt 
   602  docker build -t blackknightapp:0.2 .
-  603  git status
-  604  git add Dockerfile requirements.txt 
-  605  git commit -m 'Removed logging from requirements.txt. Dockerfile is way different, do not ask how! (Check the diffs if you really wanna know.)'
-  606  git push
-  607  docker images
   608  docker tag blackknightapp:0.2 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp
   609  docker images
   610  aws ecr get-login --no-include-email
