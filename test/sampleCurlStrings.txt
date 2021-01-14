@@ -1,3 +1,11 @@
+To actuall run the code:
+
+cd Classifier
+export FLASK_ENV=development
+export FLASK_APP=predictor.py
+flask run
+
+
 ['Truncated BILL]:
 curl -X POST http://localhost:5000/invocations -H 'Content-Type: application/json' -d '{"model": "GradientBoost", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
 
