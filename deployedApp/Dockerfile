@@ -9,7 +9,7 @@ RUN apt-get -y update && apt-get install -y --no-install-recommends \
          ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt-get install python3-pip
+# RUN apt-get install python3-pip
 
 RUN pip install --upgrade pip
 COPY requirements.txt /tmp
