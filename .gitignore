@@ -7,3 +7,4 @@ __pycache__/
 model/*
 data/shuffled-full-set-hashed.csv
 .~lock.*#
+**/log/*.log
