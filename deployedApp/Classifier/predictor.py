@@ -21,7 +21,23 @@ import boto3
 # import pandas as pd
 import logging
 
-# print(sys.path)
+# As XGBoost model only allows numerical results, so here's a dict to get
+# human-readable categories back:
+ind2category = {0: 'DELETION OF INTEREST',
+                1: 'RETURNED CHECK',
+                2: 'BILL',
+                3: 'POLICY CHANGE',
+                4: 'CANCELLATION NOTICE',
+                5: 'DECLARATION',
+                6: 'CHANGE ENDORSEMENT',
+                7: 'NON-RENEWAL NOTICE',
+                8: 'BINDER',
+                9: 'REINSTATEMENT NOTICE',
+                10: 'EXPIRATION NOTICE',
+                11: 'INTENT TO CANCEL NOTICE',
+                12: 'APPLICATION',
+                13: 'BILL BINDER'}
+
 
 # Logger format and location
 logging.basicConfig(level=logging.INFO,
@@ -35,15 +51,19 @@ prefix = '/opt/ml/'
 model_path = os.path.join(prefix, 'model')
 logging.info("Model Path" + str(model_path))
 
-# Load the model components
+# Load the tfidfVectorizer transformer
 tfidf = load(os.path.join(model_path, 'tfidfVectorizer.pkl'))
-print(f"loaded tfidf.\n{type(tfidf)}")
-logging.info(f"loaded tfidf.\n{type(tfidf)}")
+print(f"loaded tfidf:\t{type(tfidf)}")
+logging.info(f"loaded tfidf:\t{type(tfidf)}")
 
 # Load the model components
-classifier = load(os.path.join(model_path, 'ComplementNaiveBayes0.pkl'))
-print(f"loaded classifier.\n{type(classifier)}")
-logging.info(f"loaded classifier.\n{type(classifier)}")
+classifierNB = load(os.path.join(model_path, 'ComplementNaiveBayes0.pkl'))
+print(f"loaded classifierNB:\t{type(classifierNB)}")
+logging.info(f"loaded classifierNB:\t{type(classifierNB)}")
+
+classifierGB = load(os.path.join(model_path, 'GradientBoostBest.pkl.pkl'))
+print(f"loaded classifierGB:\t{type(classifierGB)}")
+logging.info(f"loaded classifierGB:\t{type(classifierGB)}")
 
 # The flask app for serving predictions
 app = flask.Flask(__name__)
@@ -75,12 +95,16 @@ def invocations():
         # tokens.append(doc.split())
 
     X = tfidf.transform(strings)
-    predictions = classifier.predict(X)
+
+    if useModel == '':
+        predictions = classifierNB.predict(X)
+    elif:
+        predictions = [ind2category(p) for p in classifierGB.predict(X)]
     print("categories:\n", predictions)
-    logging.info(f"useModel: {useModel}.")
 
     # Transform predictions to JSON
     result = {
+        'model': f"{useModel}",
         'output': list(predictions)
         }
 
