@@ -1,18 +1,19 @@
 FROM ubuntu:latest
 
-MAINTAINER speedy
-
 RUN apt-get -y update && apt-get install -y --no-install-recommends \
          wget \
-         python3 \
+         python3-pip \
          nginx \
          ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-RUN apt install python3-pip
+RUN wget https://bootstrap.pypa.io/get-pip.py && python3 get-pip.py \
+    && rm -rf /root/.cache
+
 RUN pip install --upgrade pip
 
 COPY requirements.txt /tmp
+WORKDIR /tmp
 RUN pip install -r requirements.txt
 
 RUN rm -rf /root/.cache
