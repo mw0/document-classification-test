@@ -1,0 +1,150 @@
+  480  lt
+  481  t runStreamlitCommand.txt 
+  482  rm nohup.out 
+  483  nohup streamlit run /home/$(echo $USER)/work/ArticleSummarizer/python/streamlitSummarizer.py --server.port 8501 &
+  484  cd ../../MLnotebooks/OCRapp/python/
+  485  t runStreamlitCommand.txt 
+  486  rm nohup.out 
+  487  LocalImageLocation=/home/$(echo $USER)/work/MLnotebooks/OCRapp/images/StudiesAtSmallestScaleNobelPrizes.jpg nohup streamlit run /home/$(echo $USER)/work/MLnotebooks/OCRapp/python/streamlitScan2text.py --server.port 8502 &
+  488  cd ../../../document-classification-test/
+  489  git status
+  490  git pull
+  491  git status
+  492  git diff notebook/DocumentClassificationTest.ipynb
+  493  git status
+  494  cd ~/work/
+  495  rjupyter 10000 &
+  496  git status
+  497  git status
+  498  cd document-classification-test/
+  499  git status
+  500  git pull
+  501  cd work
+  502  rjupyter 10000 &
+  503  cd ArticleSummarizer/python/
+  504  t runStreamlitCommand.txt 
+  505  nohup streamlit run /home/$(echo $USER)/work/ArticleSummarizer/python/streamlitSummarizer.py --server.port 8501 &
+  506  cd ../../MLnotebooks/OCRapp/python/
+  507  t runStreamlitCommand.txt
+  508  LocalImageLocation=/home/$(echo $USER)/work/MLnotebooks/OCRapp/images/StudiesAtSmallestScaleNobelPrizes.jpg nohup streamlit run /home/$(echo $USER)/work/MLnotebooks/OCRapp/python/streamlitScan2text.py --server.port 8502 &
+  509  cd ../../../document-classification-test/deployedApp/
+  510  ls
+  511  t ../test/sampleCurlStrings.txt 
+  512  git status
+  513  git pull
+  514  git status
+  515  git add ../python/utility/__init__.py ../python/utility/GridSearchSearchObjEx.pkl ../python/plotHelpers/__init__.py
+  516  touch ../python/__init__.py
+  517  jupyter notebook list
+  518  git status
+  519  git pull
+  520  git status
+  521  git add ../python/__init__.py
+  522  git status
+  523  ~
+  524  git status
+  525  git add ../notebook/DocumentClassificationTest.ipynb
+  526  rm payload.json 
+  527  git status
+  528  git rm payload.json zappa_settings.json
+  529  git status
+  530  git commit -m 'Getting parts of Mlib moved here to work; removing not-used zappa stuff; latest DocumentClassificationTest.ipynb.'
+  531  git push
+  532  docker build -t blackknightApp:0.2 .
+  533  docker build -t blackknightapp:0.2 .
+  534  apt install python3-pip
+  535  sudo apt auroremove
+  536  sudo apt autoremove
+  537  git pull
+  538  docker build -t blackknightapp:0.2 .
+  539  t Dockerfile 
+  540  docker build -t blackknightapp:0.2 .
+  541  docker build --no-cache -t blackknightapp:0.2 .
+  542  git pull
+  543  docker build --no-cache -t blackknightapp:0.2 .
+  544  git pull
+  545  docker build --no-cache -t blackknightapp:0.2 .
+  546  emacs -nw Dockerfile 
+  547  docker build --no-cache -t blackknightapp:0.2 .
+  548  jobs
+  549  emacs -nw Dockerfile 
+  550  emacs -nw Dockerfile 
+  551  docker build -t blackknightapp:0.2 .
+  552  emacs -nw Dockerfile 
+  553  docker build -t blackknightapp:0.2 .
+  554  emacs -nw Dockerfile 
+  555  docker build -t blackknightapp:0.2 .
+  556  emacs -nw Dockerfile 
+  557  docker build -t blackknightapp:0.2 .
+  558  emacs -nw Dockerfile 
+  559  docker build -t blackknightapp:0.2 .
+  560  docker build --no-cache -t blackknightapp:0.2 .
+  561  emacs -nw Dockerfile 
+  562  emacs -nw Dockerfile 
+  563  docker build --no-cache -t blackknightapp:0.2 .
+  564  emacs -nw Dockerfile 
+  565  docker build -t blackknightapp:0.2 .
+  566  docker build -t blackknightapp:0.2 .
+  567  emacs -nw Dockerfile 
+  568  docker build -t blackknightapp:0.2 .
+  569  dpkg-reconfigure tzdata
+  570  emacs -nw Dockerfile 
+  571  docker build -t blackknightapp:0.2 .
+  572  emacs -nw Dockerfile 
+  573  docker build -t blackknightapp:0.2 .
+  574  emacs -nw Dockerfile 
+  575  docker build -t blackknightapp:0.2 .
+  576  git log
+  577  git checkout ./Dockerfile
+  578  git pull
+  579  emacs -nw Dockerfile 
+  580  docker build -t blackknightapp:0.2 .
+  581  emacs -nw Dockerfile 
+  582  docker build -t blackknightapp:0.2 .
+  583  h
+  584  docker build --no-cache -t blackknightapp:0.2 .
+  585  emacs -nw Dockerfile 
+  586  docker build --no-cache -t blackknightapp:0.2 .
+  587  emacs -nw Dockerfile 
+  588  docker build --no-cache -t blackknightapp:0.2 .
+  589  %
+  590  emacs -nw Dockerfile 
+  591  docker build -t blackknightapp:0.2 .
+  592  emacs -nw requirements.txt 
+  593  docker build -t blackknightapp:0.2 .
+  594  lt /tmp/
+  595  jobs
+  596  %2
+  597  jobs
+  598  pip3 install logging
+  599  %
+  600  bg
+  601  emacs -nw requirements.txt 
+  602  docker build -t blackknightapp:0.2 .
+  603  git status
+  604  git add Dockerfile requirements.txt 
+  605  git commit -m 'Removed logging from requirements.txt. Dockerfile is way different, do not ask how! (Check the diffs if you really wanna know.)'
+  606  git push
+  607  docker images
+  608  docker tag blackknightapp:0.2 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp
+  609  docker images
+  610  aws ecr get-login --no-include-email
+  611  aws ecr get-login
+  612  ls ~/.aws
+  613  t ~/.aws/credentials 
+  614  docker --version
+  615  aws ecr get-login
+  616  aws help
+  617  aws help ecr
+  618  aws help services
+  619  aws help `
+  620  aws help 
+  621  aws ecr get-login
+  622  aws ecr get-login-password
+  623  docker login -u AWS -p eyJwYXlsb2FkIjoiK3hHYlQ0eGtNK0Y0ZFRJRThPRVVRbjNDTWVUdEZiTGdjZzhVR21sQlhoSVpTTExuSlVWdkNsSUM2WlU0eVVCUTFGTlE4NTlmV280TG5NSzFDWlk3czRCVWRYajhmMnI5ZUVDQzFnUXJkVU5pZjdLTm9zNFhtVFNwU1l2cnJOUTdYSjhhekZ2R1BLVmFtQXFmT3VrcWE3ZlBEWEpFZVIxTzM1QkF0N2dJYjF6N04zb3lmS1pTVHU5VXI0Y0RYUlVUU2dZd1Jqd1l6YjZrLzh2QkhGbFYzbXNSQ1Y0ZFJBWU16bkdENEppTDhyZVlLbXlJR1UwUzROZ3lBdkc1eG9PbzJPN2Y2KzdZY3p4YVo3YVhqTE9selZwNDlzWTB1akY1LzJ5b1MrQ0lwRTdqTmk2OXhacTFmZFRiMGpySDVJN0EybUw3L0JqUU9FWWhtUjdyWm9zTFFnMXN4bmg5R1N6eWR6NFBQUWJFL3VHczlZdm9EVmNnSHN1ZW9rSDlnY0Juc1pweFh3cUs3b1FuYlQ5TjZRczd2ODhhd2pCL0ZXU1NqTFA1alJpRTc2THpaOFp2RVdFZlJCNnREckprUEtNV0xpd0FQTjM3NEZKNUsrVHdydDQ3LytCc1F2enBLU0tSeTRwdm91cGpkdFI3RmpjQ1JwbGZla0EvNnFYTGpFRTR3WlV6YWtBSnJUTldwS2VsNm9PcVg3NDE0QXBwQVlXb1BVM3VudjFNWktrQUg5Z1lDZTk5Qjl3OVhwVFY2UytVSHJPcXovVDJlWE5pMVo2OFJrQmFpeGJLNHJEcmptSVJpMWFEN1F6NjNQL0pVZHJMa3h3Q1JmeElhNVpPTlFzdXpnOWpRWDJUZzVtWERDOFQvYnpoM3pNKzJNT09JNndBa1lZREw2cFhndXU2RlNlSGdaTEdwcHc3V0ZUb2hqYnRkLzdXKzdSUlYxc3ZuQTU2bEdWUHNmVnVCdHFxR01NT0ZqQkJIQlduNmhMajZIYUc2QVpiNXpFcHRsdHVqVVdpUzFldHR1QlpUQWFQVW5neWdvUmVHY0NzcHlZSFFNVFRFTFIreE5Rd0Jmd1g3RFFxcGsvMU0vbXBueUpDMUpQellsRlBaT2l2L1VENDYvVEd5MHFHZWFKL2t6NDg3azZyeEE2S3hhdFpmZlMyaDZlWlo1U3ExR3U1MFlYRThKeElST0ZDRURDMG1WdGdiTk11WjByOUJZVldwWFF2eitWYjFtRnF4OHk1UGdtQU9uNFNYV28rKzErZFk3YkZRc0xUVmF3bHBpam1wNHcwN3k5M05SODNGeG1YQm5JVVM0QUg1WWJZblp2eEFJbTZZQmExcm4veFVxUFRxSHNMT0Ivd1UzT0pmZDhmRmk2VnZsSFNxR3RIK25KRldtMmZyMTZ1c2VWOTMyMW5NVGRaSnUyTllLOGR2Vlk3cFZkUlV4YzFmR0JyNG1yZG1uUVVWUkppUFE9PSIsImRhdGFrZXkiOiJBUUVCQUhod20wWWFJU0plUnRKbTVuMUc2dXFlZWtYdW9YWFBlNVVGY2U5UnE4LzE0d0FBQUg0d2ZBWUpLb1pJaHZjTkFRY0dvRzh3YlFJQkFEQm9CZ2txaGtpRzl3MEJCd0V3SGdZSllJWklBV1VEQkFFdU1CRUVERXN1eWFEQ1o2MzhmSzlYN0FJQkVJQTdiWVNBb3JieUl1VlF4a2V0NXc1bWwrVW9tOHkxK1RnVFFDU0crOGwxTVhlSU40OVdXclRxK09rNFo0cy9YZFg1UkpPdTloUkltWkpMckxRPSIsInZlcnNpb24iOiIyIiwidHlwZSI6IkRBVEFfS0VZIiwiZXhwaXJhdGlvbiI6MTYxMDY1NjIwNX0=
+  624  aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 797623583483.dkr.ecr.us-east-1.amazonaws.com
+  625  docker images
+  626  docker push 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp:0.2`
+  627  docker push 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp:0.2
+  628  docker push 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp
+  629  h | tail -150 > ../test/history.txt
