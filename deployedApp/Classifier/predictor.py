@@ -89,10 +89,12 @@ def invocations():
 
     X = tfidf.transform(strings)
 
-    if useModel == '':
+    if useModel == 'NaiveBayes':
         predictions = classifierNB.predict(X)
-    elif:
+    elif useModel == 'XGBoosted':
         predictions = [ind2category(p) for p in classifierGB.predict(X)]
+    else:
+        predictions = ["400 Bad Request"]
     print("categories:\n", predictions)
 
     # Transform predictions to JSON
