@@ -52,7 +52,8 @@ class ScoringService(object):
         """
         print("You hit get_tfidf()!")
         if cls.tfidf is None:
-            print("opening tfidfVectorizer.pkl")
+            print("tfidf path: "
+                  f"{os.path.join(model_path, 'tfidfVectorizer.pkl')}")
             with open(os.path.join(model_path,
                                    'tfidfVectorizer.pkl'), 'rb') as f:
                 cls.tfidf = load(f)
@@ -67,7 +68,8 @@ class ScoringService(object):
         """
         print("You hit get_classifierNB()!")
         if cls.classifierNB is None:
-            print("opening ComplementNaiveBayes0.pkl")
+            print("tfidf path: "
+                  f"{os.path.join(model_path, 'ComplementNaiveBayes0.pkl')}")
             with open(os.path.join(model_path,
                                    'ComplementNaiveBayes0.pkl'), 'rb') as f:
                 cls.classifierNB = load(f)
@@ -82,7 +84,8 @@ class ScoringService(object):
         """
         print("You hit get_classifierGB()!")
         if cls.classifierGB is None:
-            print("opening GradientBoostBest.pkl")
+            print("tfidf path: "
+                  f"{os.path.join(model_path, 'GradientBoostBest.pkl')}")
             with open(os.path.join(model_path,
                                    'GradientBoostBest.pkl'), 'rb') as f:
                 cls.classifierGB = load(f)
