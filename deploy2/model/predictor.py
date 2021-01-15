@@ -39,20 +39,21 @@ class ScoringService(object):
 
     @classmethod
     def __init__(cls):
+        print(f"modelPath: {modelPath}")
         tfidfPath = modelPath / 'tfidfVectorizer.pkl'
-        print("tfidf path: {tfidfPath}")
+        print(f"tfidf path: {tfidfPath}")
         if cls.tfidf is None:
             with open(tfidfPath, 'rb') as f:
                 cls.tfidf = load(f)
 
         NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
-        print("NaiveBayes path: {NaiveBayesPath}")
+        print(f"NaiveBayes path: {NaiveBayesPath}")
         if cls.classifierNB is None:
             with open(NaiveBayesPath, 'rb') as f:
                 cls.classifierNB = load(f)
 
         XGBoostPath = modelPath / 'GradientBoostBest.pkl'
-        print("XGBoost path: {XGBoostPath}")
+        print(f"XGBoost path: {XGBoostPath}")
         if cls.classifierGB is None:
             with open(XGBoostPath, 'rb') as f:
                 cls.classifierGB = load(f)
