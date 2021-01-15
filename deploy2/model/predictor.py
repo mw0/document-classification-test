@@ -82,12 +82,15 @@ class ScoringService(object):
     @classmethod
     def health(cls):
         print("Checking health!")
-        print(f"cls.tfidf: {cls.tfidf() is not None}")
-        print(f"cls.tfidf: {cls.classifierNB() is not None}")
-        print(f"cls.tfidf: {cls.classifierGB() is not None}")
-        health = ((cls.tfidf() is not None) and
-                  (cls.classifierNB() is not None) and
-                  (cls.classifierGB() is not None))
+        dfidf = cls.tfidf()
+        print(f"tfidf: {tfidf is not None}")
+        classifierNB = cls.classifierNB()
+        print(f"classifierNB: {classifierNB is not None}")
+        classifierGB = cls.classifierGB()
+        print(f"classifierGB: {classifierGB is not None}")
+        health = ((tfidf is not None) and
+                  (classifierNB is not None) and
+                  (classifierGB is not None))
         print(f"Healty? {health}")
         return health
 
