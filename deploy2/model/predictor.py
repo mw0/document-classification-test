@@ -40,31 +40,36 @@ class ScoringService(object):
     @classmethod
     def __init__(cls):
         print(f"modelPath: {modelPath}")
+
         tfidfPath = modelPath / 'tfidfVectorizer.pkl'
         print(f"tfidf path: {tfidfPath}")
         try:
-            print(f"About to open {tfidfPath} ...")
-            f = open(str(tfidfPath), 'rb')
-            print(f"type(f): {type(f)}")
-            cls.tfidf = load(f)
-            print(f"type(cls.tfidf): {type(cls.tfidf)}")
-            f.close()
-            # with tfidfPath.open('rb') as f:
-            #     cls.tfidf = load(f)
+            with tfidfPath.open('rb') as f:
+                cls.tfidf = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
+        finally:
+            print(f"type(cls.tfidf): {type(cls.tfidf)}")
 
+        NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
+        print(f"NaiveBayesPath: {NaiveBayesPath}")
         try:
             with NaiveBayesPath.open('rb') as f:
                 cls.classifierNB = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
+        finally:
+            print(f"type(cls.classifierNB): {type(cls.classifierNB)}")
 
+        XGBoostPath = modelPath / 'GradientBoostBest.pkl'
+        print(f"XGBoostPath: {XGBoostPath}")
         try:
             with XGBoostPath.open('rb') as f:
                 cls.classifierXB = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
+        finally:
+            print(f"type(cls.classifierGB): {type(cls.classifierGB)}")
 
         print("Done with __init__().")
 
