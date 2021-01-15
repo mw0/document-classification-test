@@ -23,7 +23,6 @@ ENV PYTHONDONTWRITEBYTECODE=TRUE
 ENV PATH="/opt/program:${PATH}"
 
 # Set up the program in the image
-COPY Classifier /opt/code
-COPY serve /opt/code/
-WORKDIR /opt/code
-
+COPY Classifier /opt/program/
+COPY serve /opt/program/
+WORKDIR /opt/program

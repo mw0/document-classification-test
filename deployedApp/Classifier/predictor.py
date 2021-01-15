@@ -11,14 +11,6 @@ import json
 from joblib import load
 import flask
 import boto3
-# import time
-# import pyarrow
-# from pyarrow import feather
-# from boto3.s3.connection import S3Connection
-# from botocore.exceptions import ClientError
-# import pickle
-# import modin.pandas as pd
-# import pandas as pd
 import logging
 
 # As XGBoost model only allows numerical results, so here's a dict to get
@@ -47,8 +39,9 @@ logging.basicConfig(level=logging.INFO,
                     filemode='w')
 
 #Define the path
-prefix = '/opt/ml/'
-model_path = os.path.join(prefix, 'model')
+# prefix = 'ml/'
+# model_path = os.path.join(prefix, 'model')
+model_path = 'ml/model/'
 logging.info("Model Path" + str(model_path))
 
 # Load the tfidfVectorizer transformer

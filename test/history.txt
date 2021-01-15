@@ -123,20 +123,7 @@
   602  docker build -t blackknightapp:0.2 .
   608  docker tag blackknightapp:0.2 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp
   609  docker images
-  610  aws ecr get-login --no-include-email
-  611  aws ecr get-login
-  612  ls ~/.aws
-  613  t ~/.aws/credentials 
-  614  docker --version
-  615  aws ecr get-login
-  616  aws help
-  617  aws help ecr
-  618  aws help services
-  619  aws help `
-  620  aws help 
-  621  aws ecr get-login
   622  aws ecr get-login-password
-  623  docker login -u AWS -p eyJwYXlsb2FkIjoiK3hHYlQ0eGtNK0Y0ZFRJRThPRVVRbjNDTWVUdEZiTGdjZzhVR21sQlhoSVpTTExuSlVWdkNsSUM2WlU0eVVCUTFGTlE4NTlmV280TG5NSzFDWlk3czRCVWRYajhmMnI5ZUVDQzFnUXJkVU5pZjdLTm9zNFhtVFNwU1l2cnJOUTdYSjhhekZ2R1BLVmFtQXFmT3VrcWE3ZlBEWEpFZVIxTzM1QkF0N2dJYjF6N04zb3lmS1pTVHU5VXI0Y0RYUlVUU2dZd1Jqd1l6YjZrLzh2QkhGbFYzbXNSQ1Y0ZFJBWU16bkdENEppTDhyZVlLbXlJR1UwUzROZ3lBdkc1eG9PbzJPN2Y2KzdZY3p4YVo3YVhqTE9selZwNDlzWTB1akY1LzJ5b1MrQ0lwRTdqTmk2OXhacTFmZFRiMGpySDVJN0EybUw3L0JqUU9FWWhtUjdyWm9zTFFnMXN4bmg5R1N6eWR6NFBQUWJFL3VHczlZdm9EVmNnSHN1ZW9rSDlnY0Juc1pweFh3cUs3b1FuYlQ5TjZRczd2ODhhd2pCL0ZXU1NqTFA1alJpRTc2THpaOFp2RVdFZlJCNnREckprUEtNV0xpd0FQTjM3NEZKNUsrVHdydDQ3LytCc1F2enBLU0tSeTRwdm91cGpkdFI3RmpjQ1JwbGZla0EvNnFYTGpFRTR3WlV6YWtBSnJUTldwS2VsNm9PcVg3NDE0QXBwQVlXb1BVM3VudjFNWktrQUg5Z1lDZTk5Qjl3OVhwVFY2UytVSHJPcXovVDJlWE5pMVo2OFJrQmFpeGJLNHJEcmptSVJpMWFEN1F6NjNQL0pVZHJMa3h3Q1JmeElhNVpPTlFzdXpnOWpRWDJUZzVtWERDOFQvYnpoM3pNKzJNT09JNndBa1lZREw2cFhndXU2RlNlSGdaTEdwcHc3V0ZUb2hqYnRkLzdXKzdSUlYxc3ZuQTU2bEdWUHNmVnVCdHFxR01NT0ZqQkJIQlduNmhMajZIYUc2QVpiNXpFcHRsdHVqVVdpUzFldHR1QlpUQWFQVW5neWdvUmVHY0NzcHlZSFFNVFRFTFIreE5Rd0Jmd1g3RFFxcGsvMU0vbXBueUpDMUpQellsRlBaT2l2L1VENDYvVEd5MHFHZWFKL2t6NDg3azZyeEE2S3hhdFpmZlMyaDZlWlo1U3ExR3U1MFlYRThKeElST0ZDRURDMG1WdGdiTk11WjByOUJZVldwWFF2eitWYjFtRnF4OHk1UGdtQU9uNFNYV28rKzErZFk3YkZRc0xUVmF3bHBpam1wNHcwN3k5M05SODNGeG1YQm5JVVM0QUg1WWJZblp2eEFJbTZZQmExcm4veFVxUFRxSHNMT0Ivd1UzT0pmZDhmRmk2VnZsSFNxR3RIK25KRldtMmZyMTZ1c2VWOTMyMW5NVGRaSnUyTllLOGR2Vlk3cFZkUlV4YzFmR0JyNG1yZG1uUVVWUkppUFE9PSIsImRhdGFrZXkiOiJBUUVCQUhod20wWWFJU0plUnRKbTVuMUc2dXFlZWtYdW9YWFBlNVVGY2U5UnE4LzE0d0FBQUg0d2ZBWUpLb1pJaHZjTkFRY0dvRzh3YlFJQkFEQm9CZ2txaGtpRzl3MEJCd0V3SGdZSllJWklBV1VEQkFFdU1CRUVERXN1eWFEQ1o2MzhmSzlYN0FJQkVJQTdiWVNBb3JieUl1VlF4a2V0NXc1bWwrVW9tOHkxK1RnVFFDU0crOGwxTVhlSU40OVdXclRxK09rNFo0cy9YZFg1UkpPdTloUkltWkpMckxRPSIsInZlcnNpb24iOiIyIiwidHlwZSI6IkRBVEFfS0VZIiwiZXhwaXJhdGlvbiI6MTYxMDY1NjIwNX0=
   624  aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 797623583483.dkr.ecr.us-east-1.amazonaws.com
   625  docker images
   626  docker push 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp:0.2`
@@ -152,9 +139,51 @@ Endpoint configuration name: BlackKnightClassifier0EndpointConfig
 Endpoint name: BlackKnightClassifier0Endpoint
 Labmda function name: BlackKnightClassifier0Lambda
 
+
+
+Version 0.2c:
+After push: blackknightapp2c: digest: sha256:513b2ca5cc4f29f0be98dc364d9acdbfe8dd1db297f7490b8c623e8ba0965bc1 size: 2618
+Model name: blackknightclassifier02c
+IAM role: arn:aws:iam::797623583483:role/service-role/AmazonSageMaker-ExecutionRole-20210114T135781
+Model data location: s3://blackknight/classifierModels.tar.gz
+Endpoint configuration: blackknight-classifier02c-endpoint-config
+Endpoint: blackknight-classifier02c-endpoint
+Lambda: blackknight-classifier02c-lambda
+
+Version 0.2d:
+After push: blackknightapp2d: digest: sha256:d1732e0f4f1d3715b0f3ee6957bd24c992a57ecbcd9301ee5bccefa8b1284909 size: 2618
+Model name: blackknightclassifier02d
+IAM role: arn:aws:iam::797623583483:role/service-role/AmazonSageMaker-ExecutionRole-20210114T135781
+Model data location: s3://blackknight/classifierModels.tar.gz
+Container Image: 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp2d
+Endpoint configuration: blackknight-classifier02d-endpoint-config
+Endpoint: blackknight-classifier02d-endpoint
+Lambda: blackknight-classifier02d-lambda
+Trigger: blackknight-classifier02d-lambda-API
+
+IAM Policy addition:
+-------------------
+Select 'Add inline policy' --> JSON tab. Add this JSON:
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1464440182000",
+            "Effect": "Allow",
+            "Action": [
+                "sagemaker:InvokeEndpoint"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+
+
 lambda_function:
+---------------
 import json
-import logger
 import boto3
 import os
 
@@ -165,16 +194,16 @@ def lambda_handler(event, context):
     print("Received event: " + json.dumps(event, indent=2)
 
     data = json.loads(json.dumps(event))
-    logger.info(f'Input {str(data)}")
+    print(f'Input {str(data)}')
     payload = json.dumps(data)
 
     response = runtime.invoke_endpoint(EndpointName=ENDPOINT_NAME,
                                        ContentType='application/json',
 				       Body=payload)
-    logger.info('Endpoint invoked.')
+    print('Endpoint invoked.')
     result = jsong.loads(response['Body'].read().decode())
     final = json.dumps(result, indent=2)
-    logger.info(f'Output {str(final)}')
+    print(f'Output {str(final)}')
 
     return final
 
@@ -182,7 +211,5 @@ def lambda_handler(event, context):
 Test --> (A truncated BILL instance)
 Request Body:
 {"model": "GradientBoost", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6 5defc9f531f0 7ec02e30a5b3 f9e92c0357ef 6753b57205cb 5488cb2c0749 1ec85e7e2142 2685f0879380 b2125dcdb706 f1424da4e7d6 5defc9f531f0 b834a58b85b9 036087ac04f9 2bcce4e05d9d 6ca2dd348663 d38820625542 c9a53ea6e219 6dae7d5c1d03 1aba273fa8e4 0d66aace12f3 b6670dfb5ae7 5be138559904 b2125dcdb706 f1424da4e7d6 5defc9f531f0 b834a58b85b9 036087ac04f9 b136f6349cf3 186c2a8b23eb 7772cb33d419 e943e5e5b779 7a5e719bafba cbfb3eb99bea d38820625542 9287e6d15453 c85a9f2e0024 1c303d15eb65 351248ac109a 5ee06767bc0f ed1e3242ee34 cc27fc4409a9 4ce4bfb42e22 63e05aeec02b b9699ce57810 641356219cbc b2125dcdb706 f1424da4e7d6 5defc9f531f0 831d93352e04 21e314d3afcc ebbd827fe2a0 641356219cbc 422068f04236 d19b1c129f40 b9699ce57810 b834a58b85b9 f0666bdbc8a5 036087ac04f9 eeb86a6a04e4 2bcce4e05d9d 48d657cd9861 b643c02ad43a 831d93352e04 21e314d3afcc 2e182c67811b"]}
-
-
 
 
