@@ -44,7 +44,7 @@ class ScoringService(object):
         print(f"tfidf path: {tfidfPath}")
         try:
             print(f"About to open {tfidfPath} ...")
-            f = tfidfPath.open('rb')
+            f = open(str(tfidfPath), 'rb')
             print(f"type(f): {type(f)}")
             cls.tfidf = load(f)
             print(f"type(cls.tfidf): {type(cls.tfidf)}")
