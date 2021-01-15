@@ -43,9 +43,14 @@ class ScoringService(object):
         tfidfPath = modelPath / 'tfidfVectorizer.pkl'
         print(f"tfidf path: {tfidfPath}")
         try:
-            with tfidfPath.open('rb') as f:
-                cls.tfidf = load(f)
-        except OSError() as err:
+            f = tfidfPath.open('rb')
+            print(f"type(f): {type(f)}")
+            cls.tfidf = load(f)
+            print(f"type(cls.tfidf): {type(cls.tfidf)}")
+            f.close()
+            # with tfidfPath.open('rb') as f:
+            #     cls.tfidf = load(f)
+        Except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
 
         try:
