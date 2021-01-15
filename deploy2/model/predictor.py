@@ -42,21 +42,25 @@ class ScoringService(object):
         print(f"modelPath: {modelPath}")
         tfidfPath = modelPath / 'tfidfVectorizer.pkl'
         print(f"tfidf path: {tfidfPath}")
-        if cls.tfidf is None:
-            with open(tfidfPath, 'rb') as f:
-                cls.tfidf = load(f)
+        try:
+            with tfidfPath.open('rb') as f
+            cls.tfidf = load(f)
+        except OSError() as err:
+            print(f"{err}\t{err.args}\t{err.filename}")
 
-        NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
-        print(f"NaiveBayes path: {NaiveBayesPath}")
-        if cls.classifierNB is None:
-            with open(NaiveBayesPath, 'rb') as f:
-                cls.classifierNB = load(f)
+        try:
+            with NaiveBayesPath.open('rb') as f
+            cls.classifierNB = load(f)
+        except OSError() as err:
+            print(f"{err}\t{err.args}\t{err.filename}")
 
-        XGBoostPath = modelPath / 'GradientBoostBest.pkl'
-        print(f"XGBoost path: {XGBoostPath}")
-        if cls.classifierGB is None:
-            with open(XGBoostPath, 'rb') as f:
-                cls.classifierGB = load(f)
+        try:
+            with XGBoostPath.open('rb') as f
+            cls.classifierXB = load(f)
+        except OSError() as err:
+            print(f"{err}\t{err.args}\t{err.filename}")
+
+        print("Done with __init__().")
 
     @classmethod
     def predict(cls, modelName, stringList):
