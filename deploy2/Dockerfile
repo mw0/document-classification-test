@@ -26,6 +26,8 @@ RUN pip3 install --no-cache-dir -r /opt/program/requirements.txt
 # We also update PATH so that the train and serve programs are found when the
 # container is invoked.
 
+RUN mkdir -p /opt/ml/model
+
 ENV PYTHONUNBUFFERED=TRUE
 ENV PYTHONDONTWRITEBYTECODE=TRUE
 ENV PATH="/opt/program:${PATH}"
