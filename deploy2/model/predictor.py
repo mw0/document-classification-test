@@ -81,9 +81,14 @@ class ScoringService(object):
 
     @classmethod
     def health(cls):
+        print("Checking health!")
+        print(f"cls.tfidf: {cls.tfidf is not None}")
+        print(f"cls.tfidf: {cls.classifierNB is not None}")
+        print(f"cls.tfidf: {cls.classifierGB is not None}")
         health = ((cls.tfidf is not None) and
                   (cls.classifierNB is not None) and
                   (cls.classifierGB is not None))
+        print(f"Healty? {health}")
         return health
 
 
@@ -103,6 +108,7 @@ def ping():
     # health = ((ScoringService.tfidf is not None)
     #           and (ScoringService.get_classifierNB() is not None)
     #           and (ScoringService.get_classifierGB() is not None))
+
     health = ScoringService.health()
     print(f"health: {health}")
 
