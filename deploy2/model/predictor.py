@@ -32,7 +32,7 @@ ind2category = {0: 'DELETION OF INTEREST',
 logging.basicConfig(level=logging.INFO,
                     format='%(asctime)s %(levelname)-8s %(message)s',
                     datefmt='%a, %d %b %Y %H:%M:%S',
-                    filename='log/testApp.log',
+                    filename='./testApp.log',
                     filemode='w')
 
 # A singleton for holding the model. This simply loads the model and holds it.
