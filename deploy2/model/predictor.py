@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-
+from pathlib import Path
 import os
 import json
 import io
@@ -9,7 +9,7 @@ import flask
 from joblib import load
 import logging
 
-model_path = os.environ['MODEL_PATH']
+modelPath = Path(os.environ['MODEL_PATH'])
 
 # As XGBoost model only allows numerical results, so here's a dict to get
 # human-readable categories back:
@@ -47,21 +47,55 @@ class ScoringService(object):
 
     @classmethod
     def __init__(cls):
-        print("tfidf path: "
-              f"{os.path.join(model_path, 'tfidfVectorizer.pkl')}")
-        with open(os.path.join(model_path,
-                               'tfidfVectorizer.pkl'), 'rb') as f:
-            cls.tfidf = load(f)
-        print("tfidf path: "
-              f"{os.path.join(model_path, 'ComplementNaiveBayes0.pkl')}")
-        with open(os.path.join(model_path,
-                               'ComplementNaiveBayes0.pkl'), 'rb') as f:
-            cls.classifierNB = load(f)
-        print("tfidf path: "
-              f"{os.path.join(model_path, 'GradientBoostBest.pkl')}")
-        with open(os.path.join(model_path,
-                               'GradientBoostBest.pkl'), 'rb') as f:
-            cls.classifierGB = load(f)
+        
+        # print("tfidf path: "
+        #       f"{os.path.join(modelPath, 'tfidfVectorizer.pkl')}")
+        # with open(os.path.join(modelPath,
+        #                        'tfidfVectorizer.pkl'), 'rb') as f:
+        #     cls.tfidf = load(f)
+        # print("tfidf path: "
+        #       f"{os.path.join(modelPath, 'ComplementNaiveBayes0.pkl')}")
+        # with open(os.path.join(modelPath,
+        #                        'ComplementNaiveBayes0.pkl'), 'rb') as f:
+        #     cls.classifierNB = load(f)
+        # print("tfidf path: "
+        #       f"{os.path.join(modelPath, 'GradientBoostBest.pkl')}")
+        # with open(os.path.join(modelPath,
+        #                        'GradientBoostBest.pkl'), 'rb') as f:
+        #     cls.classifierGB = load(f)
+
+        tfidfPath = modelPath / 'tfidfVectorizer.pkl'
+        print(f"tfidf path: {tfidfPath}")
+        try:
+            with tfidfPath.open('rb') as f:
+                tfidf = load(f)
+        except OSError() as err:
+            print(f"{err}\t{err.args}\t{err.filename}")
+        finally:
+            print(f"type(tfidf): {type(tfidf)}")
+
+        NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
+        print(f"NaiveBayesPath: {NaiveBayesPath}")
+        try:
+            with NaiveBayesPath.open('rb') as f:
+                classifierNB = load(f)
+        except OSError() as err:
+            print(f"{err}\t{err.args}\t{err.filename}")
+        finally:
+            print(f"type(classifierNB): {type(classifierNB)}")
+
+        XGBoostPath = modelPath / 'GradientBoostBest.pkl'
+        print(f"XGBoostPath: {XGBoostPath}")
+        try:
+            with XGBoostPath.open('rb') as f:
+                classifierXB = load(f)
+        except OSError() as err:
+            print(f"{err}\t{err.args}\t{err.filename}")
+        finally:
+            print(f"type(classifierGB): {type(classifierGB)}")
+
+        print("Done with what had been__init__().")
+
 
     # @classmethod
     # def get_tfidf(cls):
@@ -72,8 +106,8 @@ class ScoringService(object):
     #     print("You hit get_tfidf()!")
     #     if cls.tfidf is None:
     #         print("tfidf path: "
-    #               f"{os.path.join(model_path, 'tfidfVectorizer.pkl')}")
-    #         with open(os.path.join(model_path,
+    #               f"{os.path.join(modelPath, 'tfidfVectorizer.pkl')}")
+    #         with open(os.path.join(modelPath,
     #                                'tfidfVectorizer.pkl'), 'rb') as f:
     #             cls.tfidf = load(f)
     #     print(f"type(cls.tfidf): {type(cls.tfidf)}")
@@ -88,8 +122,8 @@ class ScoringService(object):
     #     print("You hit get_classifierNB()!")
     #     if cls.classifierNB is None:
     #         print("tfidf path: "
-    #               f"{os.path.join(model_path, 'ComplementNaiveBayes0.pkl')}")
-    #         with open(os.path.join(model_path,
+    #               f"{os.path.join(modelPath, 'ComplementNaiveBayes0.pkl')}")
+    #         with open(os.path.join(modelPath,
     #                                'ComplementNaiveBayes0.pkl'), 'rb') as f:
     #             cls.classifierNB = load(f)
     #     print(f"type(cls.classifierNB): {type(cls.classifierNB)}")
@@ -104,8 +138,8 @@ class ScoringService(object):
     #     print("You hit get_classifierGB()!")
     #     if cls.classifierGB is None:
     #         print("tfidf path: "
-    #               f"{os.path.join(model_path, 'GradientBoostBest.pkl')}")
-    #         with open(os.path.join(model_path,
+    #               f"{os.path.join(modelPath, 'GradientBoostBest.pkl')}")
+    #         with open(os.path.join(modelPath,
     #                                'GradientBoostBest.pkl'), 'rb') as f:
     #             cls.classifierGB = load(f)
     #     print(f"type(cls.classifierGB): {type(cls.classifierGB)}")
