@@ -21,8 +21,13 @@ RUN rm -rf /root/.cache
 ENV PYTHONUNBUFFERED=TRUE
 ENV PYTHONDONTWRITEBYTECODE=TRUE
 ENV PATH="/opt/program:${PATH}"
+RUN echo $PATH
 
+RUN echo ""
 # Set up the program in the image
-COPY Classifier /opt/program/
+COPY Classifier /opt/program/Classifier
+RUN echo "Done copying Classifier to /opt/program/."
 COPY serve /opt/program/
+RUN echo "Done copying serve to /opt/program/."
 WORKDIR /opt/program
+RUN echo "WORKDIR set to /opt/program
