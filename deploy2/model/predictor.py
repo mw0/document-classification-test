@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 
-
+from pathlib import Path
 import os
 import json
 import io
@@ -9,7 +9,7 @@ import flask
 from joblib import load
 import logging
 
-model_path = os.environ['MODEL_PATH']
+modelPath = Path(os.environ['MODEL_PATH'])
 
 # As XGBoost model only allows numerical results, so here's a dict to get
 # human-readable categories back:
@@ -35,81 +35,24 @@ logging.basicConfig(level=logging.INFO,
                     filename='./testApp.log',
                     filemode='w')
 
-# A singleton for holding the model. This simply loads the model and holds it.
-# It has a predict function that does a prediction based on the model and the
-# input data.
-
-# tfidf = None			# Where we keep the tfidfVectorizer
-# classifierNB = None		# Where we keep NaiveBayesClassifier
-# classifierGB = None		# Where we keep XGBoostClassifier
-
 class ScoringService(object):
 
     @classmethod
     def __init__(cls):
-        print("tfidf path: "
-              f"{os.path.join(model_path, 'tfidfVectorizer.pkl')}")
-        with open(os.path.join(model_path,
-                               'tfidfVectorizer.pkl'), 'rb') as f:
+        tfidfPath = modelPath / 'tfidfVectorizer.pkl'
+        print("tfidf path: {tfidfPath}")
+        with open(tfidfPath), 'rb') as f:
             cls.tfidf = load(f)
-        print("tfidf path: "
-              f"{os.path.join(model_path, 'ComplementNaiveBayes0.pkl')}")
-        with open(os.path.join(model_path,
-                               'ComplementNaiveBayes0.pkl'), 'rb') as f:
+
+        NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
+        print("NaiveBayes path: {NaiveBayesPath}")
+        with open(NaiveBayesPath), 'rb') as f:
             cls.classifierNB = load(f)
-        print("tfidf path: "
-              f"{os.path.join(model_path, 'GradientBoostBest.pkl')}")
-        with open(os.path.join(model_path,
-                               'GradientBoostBest.pkl'), 'rb') as f:
+
+        XGBoostPath = modelPath / 'GradientBoostBest.pkl'
+        print("XGBoost path: {XGBoostPath}")
+        with open(XGBoostPath), 'rb') as f:
             cls.classifierGB = load(f)
-
-    # @classmethod
-    # def get_tfidf(cls):
-    #     """
-    #     Get the model object for this instance, loading it if it's not already
-    #     loaded.
-    #     """
-    #     print("You hit get_tfidf()!")
-    #     if cls.tfidf is None:
-    #         print("tfidf path: "
-    #               f"{os.path.join(model_path, 'tfidfVectorizer.pkl')}")
-    #         with open(os.path.join(model_path,
-    #                                'tfidfVectorizer.pkl'), 'rb') as f:
-    #             cls.tfidf = load(f)
-    #     print(f"type(cls.tfidf): {type(cls.tfidf)}")
-    #     return cls.tfidf
-
-    # @classmethod
-    # def get_classifierNB(cls):
-    #     """
-    #     Get the model object for this instance, loading it if it's not already
-    #     loaded.
-    #     """
-    #     print("You hit get_classifierNB()!")
-    #     if cls.classifierNB is None:
-    #         print("tfidf path: "
-    #               f"{os.path.join(model_path, 'ComplementNaiveBayes0.pkl')}")
-    #         with open(os.path.join(model_path,
-    #                                'ComplementNaiveBayes0.pkl'), 'rb') as f:
-    #             cls.classifierNB = load(f)
-    #     print(f"type(cls.classifierNB): {type(cls.classifierNB)}")
-    #     return cls.classifierNB
-
-    # @classmethod
-    # def get_classifierGB(cls):
-    #     """
-    #     Get the model object for this instance, loading it if it's not already
-    #     loaded.
-    #     """
-    #     print("You hit get_classifierGB()!")
-    #     if cls.classifierGB is None:
-    #         print("tfidf path: "
-    #               f"{os.path.join(model_path, 'GradientBoostBest.pkl')}")
-    #         with open(os.path.join(model_path,
-    #                                'GradientBoostBest.pkl'), 'rb') as f:
-    #             cls.classifierGB = load(f)
-    #     print(f"type(cls.classifierGB): {type(cls.classifierGB)}")
-    #     return cls.classifierGB
 
     @classmethod
     def predict(cls, modelName, stringList):
@@ -121,10 +64,6 @@ class ScoringService(object):
         """
 
         print("You hit get_predict()!")
-        # tfidf = cls.get_tfidf()
-        # classifierNB = cls.get_classifierNB()
-        # classifierGB = cls.get_classifierGB()
-
         X = cls.tfidf.transform(stringList)
 
         if modelName == 'NaiveBayes':
@@ -161,11 +100,10 @@ def ping():
 
     # You can insert a health check here
     print("You hit ping!")
-    svc = ScoringService()
     # health = ((ScoringService.tfidf is not None)
     #           and (ScoringService.get_classifierNB() is not None)
     #           and (ScoringService.get_classifierGB() is not None))
-    health = svc.health()
+    health = ScoringService.health()
     print(f"health: {health}")
 
     status = 200 if health else 404
