@@ -44,27 +44,15 @@ class ScoringService(object):
     @classmethod
     def __init__(cls):
         
-        # print("tfidf path: "
-        #       f"{os.path.join(modelPath, 'tfidfVectorizer.pkl')}")
-        # with open(os.path.join(modelPath,
-        #                        'tfidfVectorizer.pkl'), 'rb') as f:
-        #     cls.tfidf = load(f)
-        # print("tfidf path: "
-        #       f"{os.path.join(modelPath, 'ComplementNaiveBayes0.pkl')}")
-        # with open(os.path.join(modelPath,
-        #                        'ComplementNaiveBayes0.pkl'), 'rb') as f:
-        #     cls.classifierNB = load(f)
-        # print("tfidf path: "
-        #       f"{os.path.join(modelPath, 'GradientBoostBest.pkl')}")
-        # with open(os.path.join(modelPath,
-        #                        'GradientBoostBest.pkl'), 'rb') as f:
-        #     cls.classifierGB = load(f)
+        cls.tfidf = None
+        cls.classifierNB = None
+        # cls.classifierGB = None
 
         tfidfPath = modelPath / 'tfidfVectorizer.pkl'
         print(f"tfidf path: {tfidfPath}")
         try:
             with tfidfPath.open('rb') as f:
-                tfidf = load(f)
+                cls.tfidf = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
         finally:
@@ -74,7 +62,7 @@ class ScoringService(object):
         print(f"NaiveBayesPath: {NaiveBayesPath}")
         try:
             with NaiveBayesPath.open('rb') as f:
-                classifierNB = load(f)
+                cls.classifierNB = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
         finally:
@@ -85,7 +73,7 @@ class ScoringService(object):
         # print(f"XGBoostPath: {XGBoostPath}")
         # try:
         #     with XGBoostPath.open('rb') as f:
-        #         classifierXB = load(f)
+        #         cls.classifierXB = load(f)
         # except OSError() as err:
         #     print(f"{err}\t{err.args}\t{err.filename}")
         # finally:
@@ -190,6 +178,7 @@ class ScoringService(object):
 
 # The flask app for serving predictions
 app = flask.Flask(__name__)
+svc = ScoringService()
 
 
 @app.route('/ping', methods=['GET'])
@@ -201,7 +190,6 @@ def ping():
 
     # You can insert a health check here
     print("You hit ping!")
-    svc = ScoringService()
     # health = ((ScoringService.tfidf is not None)
     #           and (ScoringService.get_classifierNB() is not None)
     #           and (ScoringService.get_classifierGB() is not None))
@@ -230,7 +218,7 @@ def invocations():
     print(f'Invoked with {len(stringList)} records')
 
     # Do the prediction
-    predictions = ScoringService.predict(modelName, stringList)
+    predictions = svc.predict(modelName, stringList)
 
     # Transform predictions to JSON
     result = {
