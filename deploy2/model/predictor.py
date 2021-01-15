@@ -178,10 +178,13 @@ class ScoringService(object):
         print("You hit health().")
         print(f"cls.tfidf: {cls.tfidf}")
         print(f"cls.classifierNB: {cls.classifierNB}")
-        health = ((cls.tfidf is not None) and
-                  (cls.classifierNB is not None))
+        # health = ((cls.tfidf is not None) and
                   # (cls.classifierNB is not None) and
                   # (cls.classifierGB is not None))
+        print(f"cls.tfidf is not None: {cls.tfidf is not None}")
+        print(f"cls.classifierNB is not None: {cls.classifierNB is not None}")
+        health = ((cls.tfidf is not None) and (cls.classifierNB is not None))
+        print(f"health: {health}")
         return health
 
 
