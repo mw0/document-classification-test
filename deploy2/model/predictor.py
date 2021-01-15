@@ -198,7 +198,7 @@ def ping():
 
     status = 200 if health else 404
     print(f"status: {status}")
-    return flask.Response(response='\n', status=status,
+    return flask.Response(response=json.dumps(' '), status=status,
                           mimetype='application/json')
 
 
