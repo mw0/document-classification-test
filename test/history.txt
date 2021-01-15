@@ -132,51 +132,13 @@
   629  h | tail -150 > ../test/history.txt
 
 
-Model data location: s3://blackknight/classifierModels.tar.gz
-Image: 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp
-Model: BlackKnightClassifier0Model
-Endpoint configuration name: BlackKnightClassifier0EndpointConfig
-Endpoint name: BlackKnightClassifier0Endpoint
-Labmda function name: BlackKnightClassifier0Lambda
 
-
-
-Version 0.2c:
-After push: blackknightapp2c: digest: sha256:513b2ca5cc4f29f0be98dc364d9acdbfe8dd1db297f7490b8c623e8ba0965bc1 size: 2618
-Model name: blackknightclassifier02c
-IAM role: arn:aws:iam::797623583483:role/service-role/AmazonSageMaker-ExecutionRole-20210114T135781
-Model data location: s3://blackknight/classifierModels.tar.gz
-Endpoint configuration: blackknight-classifier02c-endpoint-config
-Endpoint: blackknight-classifier02c-endpoint
-Lambda: blackknight-classifier02c-lambda
-
-Version 0.2d:
-After push: blackknightapp2d:
-  digest: sha256:d1732e0f4f1d3715b0f3ee6957bd24c992a57ecbcd9301ee5bccefa8b1284909 size: 2618
-Model name: blackknightclassifier02d
-IAM role: arn:aws:iam::797623583483:role/service-role/AmazonSageMaker-ExecutionRole-20210114T135781
-Model data location: s3://blackknight/classifierModels.tar.gz
-Container Image: 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp2d
-Endpoint configuration: blackknight-classifier02d-endpoint-config
-Endpoint: blackknight-classifier02d-endpoint
-Lambda: blackknight-classifier02d-lambda
-Trigger: blackknight-classifier02d-lambda-API
-
-Version 0.2e:
-After push: blackknightapp2e:
-  blackknightapp2e: digest: sha256:4b742dc2733ad42a3f86f1a7d35c573f3b6d5cba8c30a81b0634276cccfcd636 size: 2618
-Model name: blackknight-classifier02e-model
-IAM role: arn:aws:iam::797623583483:role/service-role/AmazonSageMaker-ExecutionRole-20210114T135781
-Model data location: s3://blackknight/classifierModels.tar.gz
-Container Image: 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp2e
-Endpoint configuration: blackknight-classifier02e-endpoint-config
-Endpoint: blackknight-classifier02e-endpoint
-Lambda: blackknight-classifier02e-lambda
-Trigger: blackknight-classifier02e-lambda-API
-
+key: MODEL_PATH	value: /opt/ml/model
 Version 0.2h:
 After push: blackknightapp2h:
-  blackknightapp2h: digest: sha256:4b742dc2733ad42a3f86f1a7d35c573f3b6d5cba8c30a81b0634276cccfcd636 size: 2618
+  digest: sha256:93acacd0a44d7d20d6d4eb512e9ab659e2c68df0ad9e8aa5ccfdf174f33310c2 size: 2410
+Repository:
+  797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknightapp2h:latest
 Model name: blackknight-classifier02h-model
 IAM role: arn:aws:iam::797623583483:role/service-role/AmazonSageMaker-ExecutionRole-20210114T135781
 Model data location: s3://blackknight/classifierModels.tar.gz
