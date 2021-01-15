@@ -151,7 +151,8 @@ Endpoint: blackknight-classifier02c-endpoint
 Lambda: blackknight-classifier02c-lambda
 
 Version 0.2d:
-After push: blackknightapp2d: digest: sha256:d1732e0f4f1d3715b0f3ee6957bd24c992a57ecbcd9301ee5bccefa8b1284909 size: 2618
+After push: blackknightapp2d:
+  digest: sha256:d1732e0f4f1d3715b0f3ee6957bd24c992a57ecbcd9301ee5bccefa8b1284909 size: 2618
 Model name: blackknightclassifier02d
 IAM role: arn:aws:iam::797623583483:role/service-role/AmazonSageMaker-ExecutionRole-20210114T135781
 Model data location: s3://blackknight/classifierModels.tar.gz
@@ -160,6 +161,18 @@ Endpoint configuration: blackknight-classifier02d-endpoint-config
 Endpoint: blackknight-classifier02d-endpoint
 Lambda: blackknight-classifier02d-lambda
 Trigger: blackknight-classifier02d-lambda-API
+
+Version 0.2e:
+After push: blackknightapp2e:
+  blackknightapp2e: digest: sha256:4b742dc2733ad42a3f86f1a7d35c573f3b6d5cba8c30a81b0634276cccfcd636 size: 2618
+Model name: blackknight-classifier02e-model
+IAM role: arn:aws:iam::797623583483:role/service-role/AmazonSageMaker-ExecutionRole-20210114T135781
+Model data location: s3://blackknight/classifierModels.tar.gz
+Container Image: 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp2e
+Endpoint configuration: blackknight-classifier02e-endpoint-config
+Endpoint: blackknight-classifier02e-endpoint
+Lambda: blackknight-classifier02e-lambda
+Trigger: blackknight-classifier02e-lambda-API
 
 IAM Policy addition:
 -------------------
@@ -191,7 +204,7 @@ ENDPOINT_NAME = os.environ['EndPoint']
 runtime = boto3.client('runtime.sagemaker')
 
 def lambda_handler(event, context):
-    print("Received event: " + json.dumps(event, indent=2)
+    print("Received event: " + json.dumps(event, indent=2))
 
     data = json.loads(json.dumps(event))
     print(f'Input {str(data)}')

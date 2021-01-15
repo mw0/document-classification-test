@@ -65,7 +65,7 @@ def start_server():
     sigterm_handler(nginx.pid, gunicorn.pid)
     print('Inference server exiting')
 
-prefix = '/opt/ml/'
+prefix = '/opt/program/ml/'
 model_path = os.path.join(prefix, 'model')
 
 if __name__ == '__main__':
