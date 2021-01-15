@@ -50,7 +50,7 @@ class ScoringService(object):
             f.close()
             # with tfidfPath.open('rb') as f:
             #     cls.tfidf = load(f)
-        Except OSError() as err:
+        except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
 
         try:
