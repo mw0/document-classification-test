@@ -30,4 +30,4 @@ RUN echo "Done copying Classifier to /opt/program/."
 COPY serve /opt/program/
 RUN echo "Done copying serve to /opt/program/."
 WORKDIR /opt/program
-RUN echo "WORKDIR set to /opt/program
+RUN echo "WORKDIR set to /opt/program."
