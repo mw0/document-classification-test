@@ -38,7 +38,7 @@ logging.basicConfig(level=logging.INFO,
 # class ScoringService(object):
 
 #   @classmethod
-def __init__(cls):
+#   def __init__(cls):
 print(f"modelPath: {modelPath}")
 
 tfidfPath = modelPath / 'tfidfVectorizer.pkl'
