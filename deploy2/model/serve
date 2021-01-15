@@ -21,7 +21,8 @@ import sys
 
 cpu_count = multiprocessing.cpu_count()
 
-model_server_timeout = os.environ.get('MODEL_SERVER_TIMEOUT', 60)
+# Increased from 60 to 120, MW 15 Jan `21
+model_server_timeout = os.environ.get('MODEL_SERVER_TIMEOUT', 120)
 model_server_workers = int(os.environ.get('MODEL_SERVER_WORKERS', cpu_count))
 
 
