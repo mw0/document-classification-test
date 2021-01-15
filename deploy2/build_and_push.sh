@@ -53,6 +53,6 @@ echo "building image ..."
 docker build --no-cache -t ${image} .
 docker tag ${image} ${fullname}
 
-echo "pushing image ..."
-docker push ${fullname}
+# echo "pushing image ..."
+# docker push ${fullname}
 echo "Done!"
