@@ -35,6 +35,7 @@ logging.basicConfig(level=logging.INFO,
                     filename='./testApp.log',
                     filemode='w')
 
+<<<<<<< HEAD
 # A singleton for holding the model. This simply loads the model and holds it.
 # It has a predict function that does a prediction based on the model and the
 # input data.
@@ -147,17 +148,68 @@ class ScoringService(object):
         """For the input, do the predictions and return them.
 
         Args:
+=======
+# class ScoringService(object):
+
+#   @classmethod
+#   def __init__(cls):
+print(f"modelPath: {modelPath}")
+
+tfidfPath = modelPath / 'tfidfVectorizer.pkl'
+print(f"tfidf path: {tfidfPath}")
+try:
+    with tfidfPath.open('rb') as f:
+        tfidf = load(f)
+except OSError() as err:
+    print(f"{err}\t{err.args}\t{err.filename}")
+finally:
+    print(f"type(tfidf): {type(tfidf)}")
+
+NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
+print(f"NaiveBayesPath: {NaiveBayesPath}")
+try:
+    with NaiveBayesPath.open('rb') as f:
+        classifierNB = load(f)
+except OSError() as err:
+    print(f"{err}\t{err.args}\t{err.filename}")
+finally:
+    print(f"type(classifierNB): {type(classifierNB)}")
+
+XGBoostPath = modelPath / 'GradientBoostBest.pkl'
+print(f"XGBoostPath: {XGBoostPath}")
+try:
+    with XGBoostPath.open('rb') as f:
+        classifierXB = load(f)
+except OSError() as err:
+    print(f"{err}\t{err.args}\t{err.filename}")
+finally:
+    print(f"type(classifierGB): {type(classifierGB)}")
+
+print("Done with what had been__init__().")
+
+#   @classmethod
+def predict(cls, modelName, stringList):
+    """For the input, do the predictions and return them.
+
+    Args:
+>>>>>>> 9bd75c9fc468691467fadc383e08e510480d76cf
         input (a pandas dataframe): The data on which to do the
         predictions. There will be one prediction per row in the dataframe
-        """
+    """
 
-        print("You hit get_predict()!")
-        # tfidf = cls.get_tfidf()
-        # classifierNB = cls.get_classifierNB()
-        # classifierGB = cls.get_classifierGB()
+    print("You hit get_predict()!")
+    X = tfidf.transform(stringList)
 
-        X = cls.tfidf.transform(stringList)
+    if modelName == 'NaiveBayes':
+        predictions = classifierNB.predict(X)
+    elif modelName == 'XGBoosted':
+        predictions = [ind2category(p)
+                       for p in classifierGB.predict(X)]
+    else:
+        return flask.Response(response=f'Bad Request (modelName: {modelName})',
+                              status=400, mimetype='text/plain')
 
+<<<<<<< HEAD
         if modelName == 'NaiveBayes':
             predictions = cls.classifierNB.predict(X)
         # elif modelName == 'XGBoosted':
@@ -167,17 +219,27 @@ class ScoringService(object):
             return flask.Response(response=('Bad Request (modelName: '
                                             f"{modelName}))'),
                                             status=400, mimetype='text/plain')
+=======
+    print("categories:\n", predictions)
+>>>>>>> 9bd75c9fc468691467fadc383e08e510480d76cf
 
-        print("categories:\n", predictions)
+    return predictions
 
-        return predictions
+#   @classmethod
+def health(cls):
+    print("Checking health!")
+    # tfidf = tfidf()
+    print(f"tfidf: {tfidf is not None}")
+    # classifierNB = classifierNB()
+    print(f"classifierNB: {classifierNB is not None}")
+    # classifierGB = cls.classifierGB()
+    print(f"classifierGB: {classifierGB is not None}")
+    health = ((tfidf is not None) and
+              (classifierNB is not None) and
+              (classifierGB is not None))
+    print(f"Healty? {health}")
 
-    @classmethod
-    def health(cls):
-        health = ((cls.tfidf is not None) and
-                  (cls.classifierNB is not None) and
-                  (cls.classifierGB is not None))
-        return health
+    return health
 
 
 # The flask app for serving predictions
@@ -193,11 +255,8 @@ def ping():
 
     # You can insert a health check here
     print("You hit ping!")
-    svc = ScoringService()
-    # health = ((ScoringService.tfidf is not None)
-    #           and (ScoringService.get_classifierNB() is not None)
-    #           and (ScoringService.get_classifierGB() is not None))
-    health = svc.health()
+
+    health = health()
     print(f"health: {health}")
 
     status = 200 if health else 404
@@ -211,6 +270,7 @@ def invocations():
     """
     Get JSON input and extract modelName and stringList
     """
+
     input_json = flask.request.get_json()
 
     modelName = input_json['model']
@@ -222,7 +282,7 @@ def invocations():
     print(f'Invoked with {len(stringList)} records')
 
     # Do the prediction
-    predictions = ScoringService.predict(modelName, stringList)
+    predictions = predict(modelName, stringList)
 
     # Transform predictions to JSON
     result = {
