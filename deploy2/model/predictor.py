@@ -91,7 +91,7 @@ class ScoringService(object):
         # finally:
         #     print(f"type(classifierGB): {type(classifierGB)}")
 
-        print("Done with what had been__init__().")
+        print("Done with__init__().")
 
 
     # @classmethod
@@ -175,9 +175,13 @@ class ScoringService(object):
 
     @classmethod
     def health(cls):
+        print("You hit health().")
+        print(f"cls.tfidf: {cls.tfidf}")
+        print(f"cls.classifierNB: {cls.classifierNB}")
         health = ((cls.tfidf is not None) and
-                  (cls.classifierNB is not None) and
-                  (cls.classifierGB is not None))
+                  (cls.classifierNB is not None))
+                  # (cls.classifierNB is not None) and
+                  # (cls.classifierGB is not None))
         return health
 
 
