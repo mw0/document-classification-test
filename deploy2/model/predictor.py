@@ -41,18 +41,21 @@ class ScoringService(object):
     def __init__(cls):
         tfidfPath = modelPath / 'tfidfVectorizer.pkl'
         print("tfidf path: {tfidfPath}")
-        with open(tfidfPath, 'rb') as f:
-            cls.tfidf = load(f)
+        if cls.tfidf is None:
+            with open(tfidfPath, 'rb') as f:
+                cls.tfidf = load(f)
 
         NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
         print("NaiveBayes path: {NaiveBayesPath}")
-        with open(NaiveBayesPath, 'rb') as f:
-            cls.classifierNB = load(f)
+        if cls.classifierNB is None:
+            with open(NaiveBayesPath, 'rb') as f:
+                cls.classifierNB = load(f)
 
         XGBoostPath = modelPath / 'GradientBoostBest.pkl'
         print("XGBoost path: {XGBoostPath}")
-        with open(XGBoostPath, 'rb') as f:
-            cls.classifierGB = load(f)
+        if cls.classifierGB is None:
+            with open(XGBoostPath, 'rb') as f:
+                cls.classifierGB = load(f)
 
     @classmethod
     def predict(cls, modelName, stringList):
@@ -92,6 +95,7 @@ class ScoringService(object):
                   (classifierNB is not None) and
                   (classifierGB is not None))
         print(f"Healty? {health}")
+
         return health
 
 
@@ -108,11 +112,12 @@ def ping():
 
     # You can insert a health check here
     print("You hit ping!")
+    ss = ScoringService()
     # health = ((ScoringService.tfidf is not None)
     #           and (ScoringService.get_classifierNB() is not None)
     #           and (ScoringService.get_classifierGB() is not None))
 
-    health = ScoringService.health()
+    health = ss.health()
     print(f"health: {health}")
 
     status = 200 if health else 404
@@ -126,6 +131,8 @@ def invocations():
     """
     Get JSON input and extract modelName and stringList
     """
+
+    ss = ScoringService()
     input_json = flask.request.get_json()
 
     modelName = input_json['model']
@@ -137,7 +144,7 @@ def invocations():
     print(f'Invoked with {len(stringList)} records')
 
     # Do the prediction
-    predictions = ScoringService.predict(modelName, stringList)
+    predictions = ss.predict(modelName, stringList)
 
     # Transform predictions to JSON
     result = {
