@@ -39,10 +39,6 @@ logging.basicConfig(level=logging.INFO,
 # It has a predict function that does a prediction based on the model and the
 # input data.
 
-# tfidf = None			# Where we keep the tfidfVectorizer
-# classifierNB = None		# Where we keep NaiveBayesClassifier
-# classifierGB = None		# Where we keep XGBoostClassifier
-
 class ScoringService(object):
 
     @classmethod
@@ -84,15 +80,16 @@ class ScoringService(object):
         finally:
             print(f"type(classifierNB): {type(classifierNB)}")
 
-        XGBoostPath = modelPath / 'GradientBoostBest.pkl'
-        print(f"XGBoostPath: {XGBoostPath}")
-        try:
-            with XGBoostPath.open('rb') as f:
-                classifierXB = load(f)
-        except OSError() as err:
-            print(f"{err}\t{err.args}\t{err.filename}")
-        finally:
-            print(f"type(classifierGB): {type(classifierGB)}")
+        # XGBoost requires a GPU, since trained with one.
+        # XGBoostPath = modelPath / 'GradientBoostBest.pkl'
+        # print(f"XGBoostPath: {XGBoostPath}")
+        # try:
+        #     with XGBoostPath.open('rb') as f:
+        #         classifierXB = load(f)
+        # except OSError() as err:
+        #     print(f"{err}\t{err.args}\t{err.filename}")
+        # finally:
+        #     print(f"type(classifierGB): {type(classifierGB)}")
 
         print("Done with what had been__init__().")
 
@@ -163,12 +160,13 @@ class ScoringService(object):
 
         if modelName == 'NaiveBayes':
             predictions = cls.classifierNB.predict(X)
-        elif modelName == 'XGBoosted':
-            predictions = [ind2category(p)
-                           for p in cls.classifierGB.predict(X)]
+        # elif modelName == 'XGBoosted':
+        #     predictions = [ind2category(p)
+        #                    for p in cls.classifierGB.predict(X)]
         else:
-            return flask.Response(response='Bad Request', status=400,
-                                  mimetype='text/plain')
+            return flask.Response(response=('Bad Request (modelName: '
+                                            f"{modelName}))'),
+                                            status=400, mimetype='text/plain')
 
         print("categories:\n", predictions)
 
