@@ -1,10 +1,10 @@
 # required to serve the model
-flask
-gevent
-gunicorn
+Flask==1.1.2
+gevent==20.12.1
+gunicorn==20.0.4
 
 # dependencies for the custom model
-numpy
-scipy
-scikit-learn
-pandas
+numpy==1.19.5
+scikit-learn==0.22.1
+scipy==1.6.0
+pandas==1.2.0
