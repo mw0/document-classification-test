@@ -25,7 +25,7 @@ RUN echo "PATH: $PATH"
 
 RUN echo ""
 # Set up the program in the image
-COPY Classifier /opt/program/Classifier
+COPY Classifier /opt/program
 RUN echo "Done copying Classifier to /opt/program/."
 COPY serve /opt/program/
 RUN echo "Done copying serve to /opt/program/."
