@@ -44,19 +44,19 @@ class ScoringService(object):
         print(f"tfidf path: {tfidfPath}")
         try:
             with tfidfPath.open('rb') as f:
-            cls.tfidf = load(f)
+                cls.tfidf = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
 
         try:
             with NaiveBayesPath.open('rb') as f:
-            cls.classifierNB = load(f)
+                cls.classifierNB = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
 
         try:
             with XGBoostPath.open('rb') as f:
-            cls.classifierXB = load(f)
+                cls.classifierXB = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
 
