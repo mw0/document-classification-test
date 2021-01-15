@@ -165,8 +165,9 @@ class ScoringService(object):
         #                    for p in cls.classifierGB.predict(X)]
         else:
             badRequestStr = f"Bad Request (modelName: {modelName})"
-            return flask.Response(response=(badRequestStr, status=400,
-                                            mimetype='text/plain'))
+            # print(f"badRequestStr: {badRequestStr}")
+            return flask.Response(response=badRequestStr, status=400,
+                                            mimetype='text/plain')
 
         print("categories:\n", predictions)
 
