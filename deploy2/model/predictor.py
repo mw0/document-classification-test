@@ -43,19 +43,19 @@ class ScoringService(object):
         tfidfPath = modelPath / 'tfidfVectorizer.pkl'
         print(f"tfidf path: {tfidfPath}")
         try:
-            with tfidfPath.open('rb') as f
+            with tfidfPath.open('rb') as f:
             cls.tfidf = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
 
         try:
-            with NaiveBayesPath.open('rb') as f
+            with NaiveBayesPath.open('rb') as f:
             cls.classifierNB = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
 
         try:
-            with XGBoostPath.open('rb') as f
+            with XGBoostPath.open('rb') as f:
             cls.classifierXB = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
