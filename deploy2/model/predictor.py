@@ -56,7 +56,7 @@ class ScoringService(object):
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
         finally:
-            print(f"type(tfidf): {type(tfidf)}")
+            print(f"type(cls.tfidf): {type(cls.tfidf)}")
 
         NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
         print(f"NaiveBayesPath: {NaiveBayesPath}")
@@ -66,7 +66,7 @@ class ScoringService(object):
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
         finally:
-            print(f"type(classifierNB): {type(classifierNB)}")
+            print(f"type(cls.classifierNB): {type(cls.classifierNB)}")
 
         # XGBoost requires a GPU, since trained with one.
         # XGBoostPath = modelPath / 'GradientBoostBest.pkl'
@@ -77,7 +77,7 @@ class ScoringService(object):
         # except OSError() as err:
         #     print(f"{err}\t{err.args}\t{err.filename}")
         # finally:
-        #     print(f"type(classifierGB): {type(classifierGB)}")
+        #     print(f"type(cls.classifierGB): {type(cls.classifierGB)}")
 
         print("Done with__init__().")
 
