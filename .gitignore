@@ -8,3 +8,4 @@ model/*
 data/shuffled-full-set-hashed.csv
 .~lock.*#
 **/log/*.log
+deploy2/docker_test/test_dir
