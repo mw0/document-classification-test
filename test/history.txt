@@ -148,6 +148,21 @@ Endpoint: blackknight-classifier02h-endpoint
 Lambda: blackknight-classifier02h-lambda
 Trigger: blackknight-classifier02h-lambda-API
 
+key: MODEL_PATH	value: /opt/ml/model
+Version 0.2i:
+After push: blackknightapp2i:
+  **** **** latest: digest: sha256:90dae77473d23bebe4aba53cf3ae360e6fbfbb70d40d3aeea15b0f13791bd933 size: 2410
+Repository:
+  797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknightapp2i:latest
+Model name: blackknight-classifier02i-model
+**** **** IAM role: arn:aws:iam::797623583483:role/service-role/AmazonSageMaker-ExecutionRole-20210114T135781
+Model data location: s3://blackknight/classifierModelsv2.tar.gz
+Container Image: 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp2i
+Endpoint configuration: blackknight-classifier02i-endpoint-config
+Endpoint: blackknight-classifier02i-endpoint
+Lambda: blackknight-classifier02i-lambda
+Trigger: blackknight-classifier02i-lambda-API
+
 IAM Policy addition:
 -------------------
 Select 'Add inline policy' --> JSON tab. Add this JSON:
