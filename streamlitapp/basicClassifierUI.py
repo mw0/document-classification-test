@@ -17,7 +17,8 @@ import requests
 import boto3
 
 # Radio button descriptors are too long, so shorten them with this dict:
-modelNamer = {"Naive Bayes (baseline)": "NaiveBayes", "XGBoosted (optimized)": "XGBoosted"}
+modelNamer = {"Naive Bayes (baseline)": "NaiveBayes",
+              "XGBoosted (optimized)": "XGBoosted"}
 
 ACCESS_KEY_ID = os.environ['ACCESS_KEY_ID']
 SECRET_ACCESS_KEY = os.environ['SECRET_ACCESS_KEY']
