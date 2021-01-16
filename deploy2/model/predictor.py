@@ -7,9 +7,8 @@ import json
 import io
 import flask
 from joblib import load
-# import logging
 
-debeg = False
+DEBUG = False
 
 modelPath = Path(os.environ['MODEL_PATH'])
 
@@ -30,17 +29,6 @@ ind2category = {0: 'DELETION OF INTEREST',
                 12: 'APPLICATION',
                 13: 'BILL BINDER'}
 
-# Logger format and location
-# logging.basicConfig(level=logging.INFO,
-#                     format='%(asctime)s %(levelname)-8s %(message)s',
-#                     datefmt='%a, %d %b %Y %H:%M:%S',
-#                     filename='./testApp.log',
-#                     filemode='w')
-
- # A singleton for holding the model. This simply loads the model and holds it.
-# It has a predict function that does a prediction based on the model and the
-# input data.
-
 class ScoringService(object):
 
     @classmethod
@@ -51,7 +39,7 @@ class ScoringService(object):
         # cls.classifierGB = None
 
         tfidfPath = modelPath / 'tfidfVectorizer.pkl'
-        if debug:
+        if DEBUG:
             print(f"tfidf path: {tfidfPath}")
         try:
             with tfidfPath.open('rb') as f:
@@ -59,11 +47,11 @@ class ScoringService(object):
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
         finally:
-            if debug:
+            if DEBUG:
                 print(f"type(cls.tfidf): {type(cls.tfidf)}")
 
         NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
-        if debug:
+        if DEBUG:
             print(f"NaiveBayesPath: {NaiveBayesPath}")
         try:
             with NaiveBayesPath.open('rb') as f:
@@ -71,21 +59,22 @@ class ScoringService(object):
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
         finally:
-            if debug:
+            if DEBUG:
                 print(f"type(cls.classifierNB): {type(cls.classifierNB)}")
 
-        # XGBoost requires a GPU, since trained with one.
-        # XGBoostPath = modelPath / 'GradientBoostBest.pkl'
-        # if debug:
-        #     print(f"XGBoostPath: {XGBoostPath}")
-        # try:
-        #     with XGBoostPath.open('rb') as f:
-        #         cls.classifierXB = load(f)
-        # except OSError() as err:
-        #     print(f"{err}\t{err.args}\t{err.filename}")
-        # finally:
-        #     if debug:
-        #         print(f"type(cls.classifierGB): {type(cls.classifierGB)}")
+        # XGBoost requires a GPU, since trained with one; so using
+        # best Random Forest model instead. (It's almost as good!)
+        RandomForestPath = modelPath / 'RandomForest1.pkl'
+        if DEBUG:
+            print(f"RandomForestPath: {RandomForestPath}")
+        try:
+            with RandomForestPath.open('rb') as f:
+                cls.classifierRF = load(f)
+        except OSError() as err:
+            print(f"{err}\t{err.args}\t{err.filename}")
+        finally:
+            if DEBUG:
+                print(f"type(cls.classifierRF): {type(cls.classifierRF)}")
 
         print("Done with__init__().")
 
@@ -99,31 +88,32 @@ class ScoringService(object):
         predictions. There will be one prediction per row in the dataframe
         """
 
-        if debug:
+        if DEBUG:
             print("You hit get_predict()!")
 
         X = cls.tfidf.transform(stringList)
 
         if modelName == 'NaiveBayes':
             predictions = cls.classifierNB.predict(X)
-        # elif modelName == 'XGBoosted':
-        #     predictions = [ind2category(p)
-        #                    for p in cls.classifierGB.predict(X)]
+        elif modelName == 'RandomForest':
+            # predictions = [ind2category(p)
+            #                for p in cls.classifierRF.predict(X)]
+            predictions = cls.classifierRF.predict(X)
         else:
             badRequestStr = f"Bad Request (modelName: {modelName})"
             return flask.Response(response=badRequestStr, status=400,
                                             mimetype='text/plain')
 
-        if debug:
+        if DEBUG:
             print("categories:\n", predictions)
 
         return predictions
 
     @classmethod
     def health(cls):
-        if debug:
+        if DEBUG:
             print("You hit health().")
-        health = ((cls.tfidf is not None) and (cls.classifierNB is not None))
+        health = ((cls.tfidf is not None) and (cls.classifierRF is not None))
         return health
 
 
@@ -140,12 +130,12 @@ def ping():
     """
 
     # You can insert a health check here
-    if debug:
+    if DEBUG:
         print("You hit ping!")
 
     health = svc.health()
     status = 200 if health else 404
-    if debug:
+    if DEBUG:
         print(f"health: {health}, status: {status}")
 
     return flask.Response(response=json.dumps('\n'), status=status,
@@ -157,19 +147,19 @@ def invocations():
     """
     Get JSON input and extract modelName and stringList
     """
-    if debug:
+    if DEBUG:
         print("You hit invocations!")
     input_json = flask.request.get_json()
 
     modelName = input_json['model']
-    if debug:
+    if DEBUG:
         print(f"modelName: {modelName}.")
 
     stringList = input_json['strings']
-    if debug:
+    if DEBUG:
         print(stringList[0])
 
-    if debug:
+    if DEBUG:
         print(f'Invoked with {len(stringList)} records')
 
     # Do the prediction
