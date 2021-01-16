@@ -50,7 +50,8 @@ $(aws ecr get-login-password  --region ${region} --no-include-email)
 # with the full name.
 
 echo "building image ..."
-docker build --no-cache -t ${image} .
+docker build -t ${image} .
+# docker build --no-cache -t ${image} .
 docker tag ${image} ${fullname}
 
 echo "pushing image ..."
