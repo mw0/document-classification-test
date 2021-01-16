@@ -58,6 +58,7 @@ def invokeEndpoint(endpointName, requestJSON):
     response = runtime.invoke_endpoint(EndpointName=endpointName,
                                        ContentType='application/json',
                                        Body=requestJSON)
+
     return response
 
 #### Start building the app
@@ -81,12 +82,17 @@ st.sidebar.info("This is a quick UI for testing classifiers created for the "
                 "classification-test) of HeavyWater's original github repo.")
 
 # model = st.sidebar.radio("Which model?", ("Naive Bayes (baseline)", "XGBoosted (optimized)"))
+
+showFormattedRequest = False
+showFormattedRequest = st.sidebar.checkbox("Show formatted request",
+                                           value=False)
+
 model = 'Naive Bayes (baseline)'
 
 inputBox = st.empty()
 getButton = st.empty()
-JSONbox = st.empty()
 resultsBox = st.empty()
+JSONbox = st.empty()
 
 defaultDoc = ("4e5019f629a9 54fb196d55ce 0cf4049f1c7c ef4ea2777c02 f8552412da3f 0a9b859f7b89 a31962fbd5f3 2bcce4e05d9d "
               "b61f1af56200 036087ac04f9 6d25574664d2 9cdf4a63deb0 07e7fe209a3b 93c988b67c47 8a3fc46e34c1 b59e343416f7 "
@@ -178,16 +184,21 @@ JSONheader = "JSON formatted request"
 
 if getButton.button("Get results!"):
     requestJSON = createJSONrequestStr(model, docStrings)
-    JSONout = JSONbox.text_area(JSONheader, requestJSON, max_chars=4000,
-                                height=500)
+
+    if showFormattedRequest:
+        JSONout = JSONbox.text_area(JSONheader, requestJSON, max_chars=4000,
+                                    height=300)
 
     print("About to call API.")
     response = invokeEndpoint(endpointName, requestJSON)
     print(f"response: {response}")
 
     result = json.loads(response['Body'].read().decode())
+    verifiedModel = result['model']
+    categories = "\n".join(result['output'])
 
-    print(f"result: {result}")
     resultsHeader = "Response from API"
-    thing = resultsBox.text_area(resultsHeader, result, max_chars=600,
-                                 height=20)
+    thing = resultsBox.text_area(resultsHeader,
+                                 verifiedModel + ":\n" + categories,
+                                 max_chars=600, height=80)
+
