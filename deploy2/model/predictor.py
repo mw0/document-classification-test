@@ -8,7 +8,7 @@ import io
 import flask
 from joblib import load
 
-DEBUG = True
+DEBUG = False
 
 modelPath = Path(os.environ['MODEL_PATH'])
 
