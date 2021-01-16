@@ -10,3 +10,5 @@ data/shuffled-full-set-hashed.csv
 **/log/*.log
 deploy/docker_test/test_dir
 deploy2/docker_test/test_dir
+**/#*#
+**/.#*

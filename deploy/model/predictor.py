@@ -42,7 +42,8 @@ class ScoringService(object):
         if DEBUG:
             print(f"tfidf path: {tfidfPath}")
         try:
-            with tfidfPath.open('rb') as f:
+            # with tfidfPath.open('rb') as f:
+            with open(str(tfidfPath), 'rb') as f:
                 cls.tfidf = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
@@ -54,7 +55,8 @@ class ScoringService(object):
         if DEBUG:
             print(f"NaiveBayesPath: {NaiveBayesPath}")
         try:
-            with NaiveBayesPath.open('rb') as f:
+            # with NaiveBayesPath.open('rb') as f:
+            with open(str(NaiveBayesPath), 'rb') as f:
                 cls.classifierNB = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
@@ -68,7 +70,8 @@ class ScoringService(object):
         if DEBUG:
             print(f"RandomForestPath: {RandomForestPath}")
         try:
-            with RandomForestPath.open('rb') as f:
+            # with RandomForestPath.open('rb') as f:
+            with open(str(RandomForestPath), 'rb') as f:
                 cls.classifierRF = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
