@@ -60,7 +60,6 @@ elif [ "$flag" == "--no-cache" ]
     echo "Building with no cache."
     docker build --no-cache -t ${image} .
 else
-    then
     echo "Unrecognized flag: $flag"
 fi
 
