@@ -52,12 +52,15 @@ $(aws ecr get-login-password  --region ${region})
 # with the full name.
 
 if [ "$flag" == "" ]
+    then
     echo "Building image ..."
     docker build -t ${image} .
 elif [ "$flag" == "--no-cache" ]
+    then
     echo "Building with no cache."
     docker build --no-cache -t ${image} .
-then
+else
+    then
     echo "Unrecognized flag: $flag"
 fi
 
