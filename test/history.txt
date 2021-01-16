@@ -139,9 +139,9 @@ cd ~/work/document-classification-test/deploy2/model
 MODEL_PATH=/home/wilber/work/document-classifiation-test/mmodel python3 predictor.py
 
 From another terminal, try
-curl -X POST http://localhost:5000/invocations -ontent-Type: application/json' -d '{"model": "NaiveBayes", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
-curl -X POST http://localhost:5000/invocations -ontent-Type: application/json' -d '{"model": "RandomForest", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
-
+curl -X GET http://localhost:5000/ping
+curl -X POST http://localhost:5000/invocations -H 'Content-Type: application/json' -d '{"model": "NaiveBayes", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
+curl -X POST http://localhost:5000/invocations -H 'Content-Type: application/json' -d '{"model": "RandomForest", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
 
 ------- ------- -- ------ --------- -- -----
 Initial testing of docker container on rusty:
@@ -166,8 +166,9 @@ docker run -v $(pwd)/test_dir:/opt/ml -p 8080:8080 --rm 9a42f3077165 serve
 
 As regular user on rusty again, test new container with
 curl -X GET http://localhost:8080/ping
-curl -X POST http://localhost:8080/invocations -ontent-Type: application/json' -d '{"model": "NaiveBayes", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
-curl -X POST http://localhost:8080/invocations -ontent-Type: application/json' -d '{"model": "RandomForest", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
+curl -X POST http://localhost:8080/invocations -H 'Content-Type: application/json' -d '{"model": "NaiveBayes", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
+curl -X POST http://localhost:8080/invocations -H 'Content-Type: application/json' -d '{"model": "RandomForest", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
+
 
 If all good, verify on AWS that container was pushed to Elastic Container Repository, and if there start building model and end point.
 
