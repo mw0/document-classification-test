@@ -14,9 +14,21 @@ import sys
 import streamlit as st
 import pandas
 import requests
+import boto3
 
 # Radio button descriptors are too long, so shorten them with this dict:
 modelNamer = {"Naive Bayes (baseline)": "NaiveBayes", "XGBoosted (optimized)": "XGBoosted"}
+
+ACCESS_KEY_ID = os.environ['ACCESS_KEY_ID']
+SECRET_ACCESS_KEY = os.environ['SECRET_ACCESS_KEY']
+SESSION_TOKEN = None
+
+endpointName='blackknight-classifier02h-endpoint'
+runtime = boto3.Session().client('sagemaker-runtime',
+                                 region_name='us-east-1',
+                                 aws_access_key_id=ACCESS_KEY_ID,
+                                 aws_secret_access_key=SECRET_ACCESS_KEY,
+                                 aws_session_token=SESSION_TOKEN)
 
 #### cacheable functions
 @st.cache()
@@ -38,24 +50,35 @@ def createJSONrequestStr(modelString, docuString):
     return json.dumps(requestDict)
 
 
+# @st.cache()
+def invokeEndpoint(endpointName, requestJSON):
+    """
+    Fetches a response from model endpoint
+    """
+    response = runtime.invoke_endpoint(EndpointName=endpointName,
+                                       ContentType='application/json',
+                                       Body=requestJSON)
+    return response
+
 #### Start building the app
 
 st.title("Document Classifier UI for Black Knight HeavyWater Problem")
 st.info("blame: Mark Wilber")
 
 st.sidebar.title("About")
-st.sidebar.info("This is a quick UI for testing classifiers created for the Problem. "
-                "Multiple models were trained on TF-IDF features, with two shown here. "
-                "The Naive Bayes model with default settings serves as a baseline, while "
-                "the XGBoost model was the result of several hours of grid searching. "
-                "Other models performed almost as well as this best XGBoost version, but "
-                "model sizes could be as high as 475MB.\n\nWhen you mash on the 'Send' "
-                "button a JSON payload is formulated and shipped to a RESTful API hosted "
-                "on AWS. It used the model name to select which version to use for "
-                "inference. When the returned payload is returned, this app displays"
-                " the results.\n\n"
-                "For details, see [my fork](https://github.com/mw0/document-classification-test)"
-                " of HeavyWater's original github repo.")
+st.sidebar.info("This is a quick UI for testing classifiers created for the "
+                "Problem. Multiple models were trained on TF-IDF features, "
+                "with two shown here. The Naive Bayes model with default "
+                "settings serves as a baseline, while the XGBoost model was "
+                "the result of several hours of grid searching. Other models "
+                "performed almost as well as this best XGBoost version, but "
+                "model sizes could be as high as 475MB.\n\nWhen you mash on "
+                "the 'Send' button a JSON payload is formulated and shipped to"
+                " a RESTful API hosted on AWS. It used the model name to "
+                "select which version to use for inference. When the returned "
+                "payload is returned, this app displays the results.\n\n"
+                "For details, see [my fork](https://github.com/mw0/document-"
+                "classification-test) of HeavyWater's original github repo.")
 
 # model = st.sidebar.radio("Which model?", ("Naive Bayes (baseline)", "XGBoosted (optimized)"))
 model = 'Naive Bayes (baseline)'
@@ -148,11 +171,23 @@ defaultDoc = ("4e5019f629a9 54fb196d55ce 0cf4049f1c7c ef4ea2777c02 f8552412da3f 
               "ad4440ac97a5 26f768da5068 6af770640118")
 
 headingStr = ("Replace these example documents with your own, each separated by at least 1 newline.")
-docStrings = inputBox.text_area(headingStr, defaultDoc, max_chars=12000, height=500)
+docStrings = inputBox.text_area(headingStr, defaultDoc, max_chars=12000,
+                                height=500)
 
 JSONheader = "JSON formatted request"
 
 if getButton.button("Get results!"):
     requestJSON = createJSONrequestStr(model, docStrings)
-    JSONout = JSONbox.text_area(JSONheader, requestJSON, max_chars=4000, height=500)
+    JSONout = JSONbox.text_area(JSONheader, requestJSON, max_chars=4000,
+                                height=500)
 
+    print("About to call API.")
+    response = invokeEndpoint(endpointName, requestJSON)
+    print(f"response: {response}")
+
+    result = json.loads(response['Body'].read().decode())
+
+    print(f"result: {result}")
+    resultsHeader = "Response from API"
+    thing = resultsBox.text_area(resultsHeader, result, max_chars=600,
+                                 height=20)
