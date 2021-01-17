@@ -46,7 +46,7 @@ def createJSONrequestStr(modelString, docuString):
     docStrList = re.split(r'\n+', docuString)
     if len(docStrList) <= 1:
         docStrList = [docStrList]
-    requestDict = {'model': modelStr, 'strings': docStrList}
+    requestDict = {'model': modelStr, 'words': docStrList}
 
     return json.dumps(requestDict)
 

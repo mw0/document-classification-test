@@ -137,12 +137,12 @@ Initial testing of predictory.py on lucifer:
 ------- ------- -- ------------- -- -------
 🢣 Test with local model path set to trained models
 cd ~/work/document-classification-test/deploy/model
-MODEL_PATH=/home/wilber/work/document-classifiation-test/mmodel python3 predictor.py
+MODEL_PATH=/home/wilber/work/document-classification-test/model python3 predictor.py
 
 🢣 From another terminal, try
 curl -X GET http://localhost:5000/ping
-curl -X POST http://localhost:5000/invocations -H 'Content-Type: application/json' -d '{"model": "NaiveBayes", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
-curl -X POST http://localhost:5000/invocations -H 'Content-Type: application/json' -d '{"model": "RandomForest", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
+curl -X POST http://localhost:5000/invocations -H 'Content-Type: application/json' -d '{"model": "NaiveBayes", "words": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
+curl -X POST http://localhost:5000/invocations -H 'Content-Type: application/json' -d '{"model": "RandomForest", "words": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
 
 ------- ------- -- ------ --------- -- -----
 Initial testing of docker container on rusty:
@@ -167,8 +167,8 @@ docker run -v $(pwd)/test_dir:/home/mark/work/document-classification-test/model
 
 As regular user on rusty again, test new container with
 curl -X GET http://localhost:8080/ping
-curl -X POST http://localhost:8080/invocations -H 'Content-Type: application/json' -d '{"model": "NaiveBayes", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
-curl -X POST http://localhost:8080/invocations -H 'Content-Type: application/json' -d '{"model": "RandomForest", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
+curl -X POST http://localhost:8080/invocations -H 'Content-Type: application/json' -d '{"model": "NaiveBayes", "words": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
+curl -X POST http://localhost:8080/invocations -H 'Content-Type: application/json' -d '{"model": "RandomForest", "words": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6"]}'
 
 ------------------------------------------------------------------------------
 
@@ -260,7 +260,7 @@ def lambda_handler(event, context):
 
 Test --> (A truncated BILL instance)
 Request Body:
-{"model": "NaiveBayes", "strings": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6 5defc9f531f0 7ec02e30a5b3 f9e92c0357ef 6753b57205cb 5488cb2c0749 1ec85e7e2142 2685f0879380 b2125dcdb706 f1424da4e7d6 5defc9f531f0 b834a58b85b9 036087ac04f9 2bcce4e05d9d 6ca2dd348663 d38820625542 c9a53ea6e219 6dae7d5c1d03 1aba273fa8e4 0d66aace12f3 b6670dfb5ae7 5be138559904 b2125dcdb706 f1424da4e7d6 5defc9f531f0 b834a58b85b9 036087ac04f9 b136f6349cf3 186c2a8b23eb 7772cb33d419 e943e5e5b779 7a5e719bafba cbfb3eb99bea d38820625542 9287e6d15453 c85a9f2e0024 1c303d15eb65 351248ac109a 5ee06767bc0f ed1e3242ee34 cc27fc4409a9 4ce4bfb42e22 63e05aeec02b b9699ce57810 641356219cbc b2125dcdb706 f1424da4e7d6 5defc9f531f0 831d93352e04 21e314d3afcc ebbd827fe2a0 641356219cbc 422068f04236 d19b1c129f40 b9699ce57810 b834a58b85b9 f0666bdbc8a5 036087ac04f9 eeb86a6a04e4 2bcce4e05d9d 48d657cd9861 b643c02ad43a 831d93352e04 21e314d3afcc 2e182c67811b"]}
+{"model": "NaiveBayes", "words": ["586242498a88 9ccf259ca087 54709b24b45f 6bf9c0cb01b4 3486e5fe0d73 c337a85b8ef9 b2125dcdb706 f1424da4e7d6 5defc9f531f0 7ec02e30a5b3 f9e92c0357ef 6753b57205cb 5488cb2c0749 1ec85e7e2142 2685f0879380 b2125dcdb706 f1424da4e7d6 5defc9f531f0 b834a58b85b9 036087ac04f9 2bcce4e05d9d 6ca2dd348663 d38820625542 c9a53ea6e219 6dae7d5c1d03 1aba273fa8e4 0d66aace12f3 b6670dfb5ae7 5be138559904 b2125dcdb706 f1424da4e7d6 5defc9f531f0 b834a58b85b9 036087ac04f9 b136f6349cf3 186c2a8b23eb 7772cb33d419 e943e5e5b779 7a5e719bafba cbfb3eb99bea d38820625542 9287e6d15453 c85a9f2e0024 1c303d15eb65 351248ac109a 5ee06767bc0f ed1e3242ee34 cc27fc4409a9 4ce4bfb42e22 63e05aeec02b b9699ce57810 641356219cbc b2125dcdb706 f1424da4e7d6 5defc9f531f0 831d93352e04 21e314d3afcc ebbd827fe2a0 641356219cbc 422068f04236 d19b1c129f40 b9699ce57810 b834a58b85b9 f0666bdbc8a5 036087ac04f9 eeb86a6a04e4 2bcce4e05d9d 48d657cd9861 b643c02ad43a 831d93352e04 21e314d3afcc 2e182c67811b"]}
 
 
 Streamlit t2.micro instance Public IPv4 DNS:

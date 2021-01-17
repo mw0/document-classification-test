@@ -7,6 +7,7 @@ import json
 import io
 import flask
 from joblib import load
+import numpy as np
 
 DEBUG = False
 
@@ -33,7 +34,7 @@ class ScoringService(object):
 
     @classmethod
     def __init__(cls):
-        
+
         cls.tfidf = None
         cls.classifierNB = None
         # cls.classifierGB = None
@@ -41,6 +42,7 @@ class ScoringService(object):
         tfidfPath = modelPath / 'tfidfVectorizer.pkl'
         if DEBUG:
             print(f"tfidf path: {tfidfPath}")
+        print(f"tfidfPath.is_file(): {tfidfPath.is_file()}")
         try:
             # with tfidfPath.open('rb') as f:
             with open(str(tfidfPath), 'rb') as f:
@@ -54,6 +56,7 @@ class ScoringService(object):
         NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
         if DEBUG:
             print(f"NaiveBayesPath: {NaiveBayesPath}")
+        print(f"NaiveBayesPath.is_file(): {NaiveBayesPath.is_file()}")
         try:
             # with NaiveBayesPath.open('rb') as f:
             with open(str(NaiveBayesPath), 'rb') as f:
@@ -69,6 +72,7 @@ class ScoringService(object):
         RandomForestPath = modelPath / 'RandomForest1.pkl'
         if DEBUG:
             print(f"RandomForestPath: {RandomForestPath}")
+        print(f"RandomForestPath.is_file(): {RandomForestPath.is_file()}")
         try:
             # with RandomForestPath.open('rb') as f:
             with open(str(RandomForestPath), 'rb') as f:
@@ -100,8 +104,10 @@ class ScoringService(object):
             predictions = cls.classifierNB.predict(X)
         elif modelName == 'RandomForest':
             # predictions = [ind2category(p)
-            #                for p in cls.classifierRF.predict(X)]
-            predictions = cls.classifierRF.predict(X)
+            #                for p in cls.classifierGB.predict(X)]
+            predicted = list(cls.classifierRF.predict(X))
+            probas = list(cls.classifierRF.predict_proba(X).max(axis=1))
+            predictions = [predicted, probas]
         else:
             badRequestStr = f"Bad Request (modelName: {modelName})"
             return flask.Response(response=badRequestStr, status=400,
@@ -158,7 +164,7 @@ def invocations():
     if DEBUG:
         print(f"modelName: {modelName}.")
 
-    stringList = input_json['strings']
+    stringList = input_json['words']
     if DEBUG:
         print(stringList[0])
 
@@ -169,9 +175,17 @@ def invocations():
     predictions = svc.predict(modelName, stringList)
 
     # Transform predictions to JSON
-    result = {
-        'model': f"{modelName}",
-        'output': list(predictions)
+    if modelName == 'RandomForest':
+        print(f"np.shape(predictions): {np.shape(predictions)}")
+        result = {
+            'model': f"{modelName}",
+            'prediction': list(predictions[0]),
+            'confidence': list(predictions[1])
+        }
+    else:
+        result = {
+            'model': f"{modelName}",
+            'prediction': list(predictions)
         }
 
     resultjson = json.dumps(result)
