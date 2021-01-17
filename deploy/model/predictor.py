@@ -176,7 +176,6 @@ def invocations():
 
     # Transform predictions to JSON
     if modelName == 'RandomForest':
-        print(f"np.shape(predictions): {np.shape(predictions)}")
         result = {
             'model': f"{modelName}",
             'prediction': list(predictions[0]),
