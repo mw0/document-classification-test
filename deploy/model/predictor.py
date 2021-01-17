@@ -42,10 +42,10 @@ class ScoringService(object):
         tfidfPath = modelPath / 'tfidfVectorizer.pkl'
         if DEBUG:
             print(f"tfidf path: {tfidfPath}")
-        print(f"tfidfPath.is_file(): {tfidfPath.is_file()}")
+            print(f"tfidfPath.is_file(): {tfidfPath.is_file()}")
         try:
-            # with tfidfPath.open('rb') as f:
-            with open(str(tfidfPath), 'rb') as f:
+            with tfidfPath.open('rb') as f:
+            # with open(str(tfidfPath), 'rb') as f:
                 cls.tfidf = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
@@ -56,10 +56,10 @@ class ScoringService(object):
         NaiveBayesPath = modelPath / 'ComplementNaiveBayes0.pkl'
         if DEBUG:
             print(f"NaiveBayesPath: {NaiveBayesPath}")
-        print(f"NaiveBayesPath.is_file(): {NaiveBayesPath.is_file()}")
+            print(f"NaiveBayesPath.is_file(): {NaiveBayesPath.is_file()}")
         try:
-            # with NaiveBayesPath.open('rb') as f:
-            with open(str(NaiveBayesPath), 'rb') as f:
+            with NaiveBayesPath.open('rb') as f:
+            # with open(str(NaiveBayesPath), 'rb') as f:
                 cls.classifierNB = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
@@ -72,10 +72,10 @@ class ScoringService(object):
         RandomForestPath = modelPath / 'RandomForest1.pkl'
         if DEBUG:
             print(f"RandomForestPath: {RandomForestPath}")
-        print(f"RandomForestPath.is_file(): {RandomForestPath.is_file()}")
+            print(f"RandomForestPath.is_file(): {RandomForestPath.is_file()}")
         try:
-            # with RandomForestPath.open('rb') as f:
-            with open(str(RandomForestPath), 'rb') as f:
+            with RandomForestPath.open('rb') as f:
+            # with open(str(RandomForestPath), 'rb') as f:
                 cls.classifierRF = load(f)
         except OSError() as err:
             print(f"{err}\t{err.args}\t{err.filename}")
