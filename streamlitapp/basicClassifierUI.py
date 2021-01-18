@@ -18,13 +18,13 @@ import boto3
 
 # Radio button descriptors are too long, so shorten them with this dict:
 modelNamer = {"Naive Bayes (baseline)": "NaiveBayes",
-              "XGBoosted (optimized)": "XGBoosted"}
+              "RandomForest (optimized)": "RandomForest"}
 
 ACCESS_KEY_ID = os.environ['ACCESS_KEY_ID']
 SECRET_ACCESS_KEY = os.environ['SECRET_ACCESS_KEY']
 SESSION_TOKEN = None
 
-endpointName='blackknight-classifier02h-endpoint'
+endpointName='blackknightapp3-endpoint'
 runtime = boto3.Session().client('sagemaker-runtime',
                                  region_name='us-east-1',
                                  aws_access_key_id=ACCESS_KEY_ID,
@@ -56,25 +56,30 @@ def invokeEndpoint(endpointName, requestJSON):
     """
     Fetches a response from model endpoint
     """
-    response = runtime.invoke_endpoint(EndpointName=endpointName,
-                                       ContentType='application/json',
-                                       Body=requestJSON)
+    try:
+        response = runtime.invoke_endpoint(EndpointName=endpointName,
+                                           ContentType='application/json',
+                                           Body=requestJSON)
+    except Exception as e:
+        print(f"Failed to fetch result: {e}")
 
     return response
 
 #### Start building the app
 
-st.title("Document Classifier UI for Black Knight HeavyWater Problem")
+st.title("Document Classifier for Black Knight HeavyWater")
 st.info("blame: Mark Wilber")
 
 st.sidebar.title("About")
 st.sidebar.info("This is a quick UI for testing classifiers created for the "
                 "Problem. Multiple models were trained on TF-IDF features, "
                 "with two shown here. The Naive Bayes model with default "
-                "settings serves as a baseline, while the XGBoost model was "
-                "the result of several hours of grid searching. Other models "
-                "performed almost as well as this best XGBoost version, but "
-                "model sizes could be as high as 475MB.\n\nWhen you mash on "
+                "settings serves as a baseline, while the Random Forest model "
+                "was the result of several hours of grid searching. This "
+                "performed almost as well as the best XGBoost version, but "
+                "the latter was trained on a GPU machine, and won't run on"
+                "a standard EC2 machine. (The best Random Forest model is "
+                "nearly as good.\n\nWhen you mash on "
                 "the 'Send' button a JSON payload is formulated and shipped to"
                 " a RESTful API hosted on AWS. It used the model name to "
                 "select which version to use for inference. When the returned "
@@ -82,18 +87,23 @@ st.sidebar.info("This is a quick UI for testing classifiers created for the "
                 "For details, see [my fork](https://github.com/mw0/document-"
                 "classification-test) of HeavyWater's original github repo.")
 
-# model = st.sidebar.radio("Which model?", ("Naive Bayes (baseline)", "XGBoosted (optimized)"))
+model = st.sidebar.radio("Which model?",
+                         ("Naive Bayes (baseline)",
+                          "RandomForest (optimized)"))
 
 showFormattedRequest = False
 showFormattedRequest = st.sidebar.checkbox("Show formatted request",
                                            value=False)
 
-model = 'Naive Bayes (baseline)'
-
+inputTitle = st.empty()
 inputBox = st.empty()
 getButton = st.empty()
+resultsTitle = st.empty()
 resultsBox = st.empty()
+JSONtitle = st.empty()
 JSONbox = st.empty()
+
+# Two example documents to populate the text box:
 
 defaultDoc = ("4e5019f629a9 54fb196d55ce 0cf4049f1c7c ef4ea2777c02 "
               "f8552412da3f 0a9b859f7b89 a31962fbd5f3 2bcce4e05d9d "
@@ -258,29 +268,40 @@ defaultDoc = ("4e5019f629a9 54fb196d55ce 0cf4049f1c7c ef4ea2777c02 "
               "ad4440ac97a5 26f768da5068 6af770640118")
 
 headingStr = ("Replace these example documents with your own, each separated"
-              " by at least 1 newline.")
-docStrings = inputBox.text_area(headingStr, defaultDoc, max_chars=12000,
+              " by at least 1 new line.")
+inputTitle.markdown(f"#### {headingStr}")
+docStrings = inputBox.text_area('', defaultDoc, max_chars=12000,
                                 height=500)
 
-JSONheader = "JSON formatted request"
-
 if getButton.button("Get results!"):
+
     requestJSON = createJSONrequestStr(model, docStrings)
-
-    if showFormattedRequest:
-        JSONout = JSONbox.text_area(JSONheader, requestJSON, max_chars=4000,
-                                    height=300)
-
-    print("About to call API.")
     response = invokeEndpoint(endpointName, requestJSON)
-    print(f"response: {response}")
 
     result = json.loads(response['Body'].read().decode())
     verifiedModel = result['model']
-    categories = "\n".join(result['output'])
+    if verifiedModel == 'NaiveBayes':
+        categories = "\n".join(result['prediction'])
+        formattedResult = ("Model: " + verifiedModel
+                           + "\nPredicted category:\n\n"
+                           + categories)
+    else:
+        categories = result['prediction']
+        confidences = result['confidence']
+        confidencePredict = ["\t\t".join([str(c), p])
+                             for c, p in zip(confidences, categories)]
+        formattedResult = (f"Model: {verifiedModel}"
+                           + "\nConfidence\tPredicted category:\n\n"
+                           + "\n".join(confidencePredict))
+        print("\n", formattedResult)
+    print(formattedResult)
 
-    resultsHeader = "Response from API"
-    thing = resultsBox.text_area(resultsHeader,
-                                 verifiedModel + ":\n" + categories,
-                                 max_chars=600, height=80)
+    resultsTitle.markdown("#### Response from API")
+    thing = resultsBox.text_area('',
+                                 formattedResult,
+                                 max_chars=2000, height=200)
 
+    if showFormattedRequest:
+        JSONtitle.markdown("#### JSON formatted request")
+        JSONout = JSONbox.text_area('', requestJSON, max_chars=4000,
+                                    height=300)

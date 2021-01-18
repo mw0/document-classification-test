@@ -1,7 +1,8 @@
+🢣 Shell in to remote machine:
 ssh -i "../info/Streamlit4BlackKnight.pem"  ubuntu@ec2-54-226-227-175.compute-1.amazonaws.com
 
-scp file there:
+🢣 scp file from here to there:
 scp -i "../info/Streamlit4BlackKnight.pem" basicClassifierUI.py ubuntu@ec2-54-226-227-175.compute-1.amazonaws.com:streamlit/
 
-scp from there:
+🢣 scp from there to here:
 scp -i "../info/Streamlit4BlackKnight.pem"  ubuntu@ec2-54-226-227-175.compute-1.amazonaws.com:streamlit/basicClassifierUI.py ./

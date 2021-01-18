@@ -194,19 +194,19 @@ Trigger: blackknight-classifier02h-lambda-API
 
 key: MODEL_PATH	value: /opt/ml/model
 Version 3:
-After build, image is: 46ecbf1b6d45
+After build, image is: b68ba66f5f7a
 After push: blackknightapp3:
   latest: digest: sha256:ca20ccac873fdb9f805232c769978a245d47358d0cc0abd8f28bca9096e4ec23 size: 2410
 Repository:
   797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknightapp3:latest
-Model name: blackknight-classifier03-model
+Model name: blackknightapp3-model
 **** **** IAM role: arn:aws:iam::797623583483:role/service-role/AmazonSageMaker-ExecutionRole-20210114T135781
 Model data location: s3://blackknight/classifierModelsv2.tar.gz
-Container Image: 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknight:blackknightapp3
-Endpoint configuration: blackknight-classifier02h-endpoint-config
-Endpoint: blackknight-classifier03-endpoint
-Lambda: blackknight-classifier03-lambda
-Trigger: blackknight-classifier03-lambda-API
+Container Image: 797623583483.dkr.ecr.us-east-1.amazonaws.com/blackknightapp3
+Endpoint configuration: blackknightapp3-endpoint-config
+Endpoint: blackknightapp3-endpoint
+Lambda: blackknightapp3-lambda
+Trigger: blackknightapp3-lambda-API
 
 ------------------------------------------------------------------------------
 
