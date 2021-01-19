@@ -44,14 +44,14 @@ then
 fi
 
 # Get the login command from ECR and execute it directly
-$(aws ecr get-login-password  --region ${region} --no-include-email)
+$(aws ecr get-login-password  --region ${region})
 
 # Build the docker image locally with the image name and then push it to ECR
 # with the full name.
 
 echo "building image ..."
-# docker build -t ${image} .
-docker build --no-cache -t ${image} .
+docker build -t ${image} .
+# docker build --no-cache -t ${image} .
 docker tag ${image} ${fullname}
 
 echo "pushing image ..."
