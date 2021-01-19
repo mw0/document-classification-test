@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 #!/usr/bin/python3
 
+# Credit: much borrowed from Ritchie Vink's
+# [sagemaker-custom-model](https://github.com/ritchie46/sagemaker-custom-model)
+
 from pathlib import Path
 import os
 import json
