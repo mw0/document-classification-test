@@ -11,10 +11,13 @@ import json
 import re
 
 import sys
+from io import StringIO
 import streamlit as st
 import pandas
 import requests
 import boto3
+import pandas as pd
+import base64
 
 # Radio button descriptors are too long, so shorten them with this dict:
 modelNamer = {"Naive Bayes (baseline)": "NaiveBayes",
@@ -42,13 +45,48 @@ def createJSONrequestStr(modelString, docuString):
     modelNamer dict.
     """
 
-    modelStr = modelNamer[modelString]
+    print(docuString)
     docStrList = re.split(r'\n+', docuString)
     if len(docStrList) <= 1:
         docStrList = [docStrList]
-    requestDict = {'model': modelStr, 'words': docStrList}
+    requestDict = {'model': modelString, 'words': docStrList}
 
     return json.dumps(requestDict)
+
+
+# @st.cache()
+def formatResponse(response, format='textbox'):
+    """
+    response	str: JSON payload from endpoint, which has the format
+                {'model': <model name>,
+                 'prediction': [<category>, <category>, ... <category>],
+                 'confidence': [<value>, <value>, ... <value>]}
+                Note: 'confidence' is returned only if model is 'RandomForest'
+    format	str: one of ['textbox', 'csv'], default: 'textbox'
+    """
+
+    result = json.loads(response['Body'].read().decode())
+    verifiedModel = result['model']
+    if verifiedModel == 'NaiveBayes':
+        categories = "\n".join(result['prediction'])
+        formattedResult = ("Model: Naive Bayes"
+                           + "\nPredicted category:\n\n"
+                           + categories)
+    else:
+        categories = result['prediction']
+        confidences = result['confidence']
+        if format == 'textbox':
+            confidencePredict = ['\t\t'.join([f'{c:6.4f}', p])
+                                 for c, p in zip(confidences, categories)]
+            spacer = '\n\n'
+        else:
+            confidencePredict = [','.join([f'{c:6.4f}', p])
+                                 for c, p in zip(confidences, categories)]
+            spacer = ','
+        formattedResult = (f"Model: Random Forest"
+                           + "\nConfidence" + spacer + "Predicted category:\n\n"
+                           + "\n".join(confidencePredict))
+    return formattedResult
 
 
 # @st.cache()
@@ -70,30 +108,92 @@ def invokeEndpoint(endpointName, requestJSON):
 st.title("Document Classifier for Black Knight HeavyWater")
 st.info("blame: Mark Wilber")
 
-st.sidebar.title("About")
-st.sidebar.info("This is a quick UI for testing classifiers created for the "
-                "Problem. Multiple models were trained on TF-IDF features, "
-                "with two shown here. The Naive Bayes model with default "
-                "settings serves as a baseline, while the Random Forest model "
-                "was the result of several hours of grid searching. This "
-                "performed almost as well as the best XGBoost version, but "
-                "the latter was trained on a GPU machine, and won't run on"
-                "a standard EC2 machine. (The best Random Forest model is "
-                "nearly as good.\n\nWhen you mash on "
-                "the 'Send' button a JSON payload is formulated and shipped to"
-                " a RESTful API hosted on AWS. It used the model name to "
-                "select which version to use for inference. When the returned "
-                "payload is returned, this app displays the results.\n\n"
-                "For details, see [my fork](https://github.com/mw0/document-"
-                "classification-test) of HeavyWater's original github repo.")
+sidebarAbout = st.sidebar.empty()
+sidebarInfo = st.sidebar.empty()
+sidebarRadioHeader = st.sidebar.empty()
+sidebarRadio = st.sidebar.empty()
+sidebarJSONcheckbox = st.sidebar.empty()
+sidebarUploadHeader = st.sidebar.empty()
+sidebarUpload = st.sidebar.empty()
+sidebarUploadInfo = st.sidebar.empty()
 
-model = st.sidebar.radio("Which model?",
-                         ("Naive Bayes (baseline)",
-                          "RandomForest (optimized)"))
+sidebarAbout.title("About")
+infoStr = ("This is a quick UI for testing classifiers created for the "
+           "Problem. Multiple models were trained on TF-IDF features, "
+           "with two available here:\n\n* Naive Bayes with default "
+           "settings, serving as a baseline\n* Random Forest model,"
+           " selected after multiple hours of grid search\n\nMash on "
+           "the 'Get results!' button, and document strings in the box to "
+           "the right will be JSONified and shipped to a RESTful API hosted "
+           "on AWS. The model name, set by the radio button below, will "
+           "determine which model to use for inference.\n\nThe returned"
+           " JSON payload is formatted and displayed.\n\n"
+           "🢣 Alternatively, see Upload File option below for batch "
+           "processing (below).\n\n"
+           "For details, see [my fork](https://github.com/mw0/document-"
+           "classification-test) of HeavyWater's original github repo.")
+
+sidebarInfo.markdown(infoStr)
+sidebarRadioHeader.markdown('#### Which Model?')
+model = sidebarRadio.radio('',
+                           ("Naive Bayes (baseline)",
+                            "RandomForest (optimized)"))
 
 showFormattedRequest = False
-showFormattedRequest = st.sidebar.checkbox("Show formatted request",
-                                           value=False)
+showFormattedRequest = sidebarJSONcheckbox.checkbox("Show formatted request",
+                                                    value=False)
+
+# File uploader for batch requests
+sidebarUploadHeader.markdown('### Upload File (batch processing)\n\n🢣 Wait for'
+                             ' <font color="x7070ff"><u>Download results</u>'
+                             '</font> link ...', unsafe_allow_html=True)
+batchDataFile = sidebarUpload.file_uploader('', key='userFile')
+sidebarUploadInfo.markdown('**Format** Replace <model_name> with "NaiveBays"'
+                           ' or "RandomForest":\n\n'
+                           '```\n<model name>\n'
+                           '07e7fe209a3b ... many tokens ... 93c988b67c47\n'
+                           'c1a2676df403 ... many tokens ... f1413affa34b\n'
+                           '8b0131ee1005 ... many tokens ... 12654bbe59c7\n'
+                           '                      .\n'
+                           '                      .\n'
+                           '                      .')
+
+tinyDict = {'naivebayes': 'NaiveBayes', 'randomforest': 'RandomForest'}
+if batchDataFile is not None:
+    # To read file as bytes:
+    rawBytes = batchDataFile.getvalue()
+
+    # To convert to a string based IO:
+    batchStr = str(rawBytes, 'utf-8')
+    docStrings = batchStr.split('\n')
+
+    userModelName = docStrings.pop(0)
+    modelName = userModelName.lower().strip()
+    # enforce correct case:
+    if modelName in ['naivebayes', 'randomforest']:
+        modelName = tinyDict[modelName]
+        requestJSON = createJSONrequestStr(modelName,
+                                           '\n'.join(docStrings))
+        response = invokeEndpoint(endpointName, requestJSON)
+
+        formattedResult = formatResponse(response, format='csv')
+        formattedResult += "\n"
+        # with open('./results.txt', 'wt', encoding='utf-8') as outFile:
+        #     outFile.write(formattedResult)
+
+        # some strings <-> bytes conversions necessary here:
+        b64 = base64.b64encode(formattedResult.encode()).decode()
+        href = (f'<a href="data:file/text;base64,{b64}">Download results</a>')
+        sidebarUploadInfo.markdown(href, unsafe_allow_html=True)
+    else:
+        sidebarUploadErrorStr =  ('### 🢣 <font color="darkred">model name '
+                                  'error</font>\nYou provided '
+                                  f'"{userModelName}", but must be either '
+                                  '"NaiveBayes" or "RandomForest".\n\ninsert '
+                                  'valid model name in first line of your '
+                                  'file, then try again.')
+        sidebarUploadInfo.markdown(sidebarUploadErrorStr,
+                                   unsafe_allow_html=True)
 
 inputTitle = st.empty()
 inputBox = st.empty()
@@ -269,39 +369,27 @@ defaultDoc = ("4e5019f629a9 54fb196d55ce 0cf4049f1c7c ef4ea2777c02 "
 
 headingStr = ("Replace these example documents with your own, each separated"
               " by at least 1 new line.")
-inputTitle.markdown(f"#### {headingStr}")
+inputTitle.markdown(f"#### {headingStr}\n(Note also: batch file upload in "
+              "sidebar)")
 docStrings = inputBox.text_area('', defaultDoc, max_chars=12000,
                                 height=500)
 
+thing = resultsBox.text_area('', '',
+                             max_chars=2000, height=200)
+
+resultsTitle.markdown("#### Response from API")
+modelString = modelNamer[model]
+requestJSON = createJSONrequestStr(modelString, docStrings)
 if getButton.button("Get results!"):
 
-    requestJSON = createJSONrequestStr(model, docStrings)
     response = invokeEndpoint(endpointName, requestJSON)
 
-    result = json.loads(response['Body'].read().decode())
-    verifiedModel = result['model']
-    if verifiedModel == 'NaiveBayes':
-        categories = "\n".join(result['prediction'])
-        formattedResult = ("Model: " + verifiedModel
-                           + "\nPredicted category:\n\n"
-                           + categories)
-    else:
-        categories = result['prediction']
-        confidences = result['confidence']
-        confidencePredict = ["\t\t".join([str(c), p])
-                             for c, p in zip(confidences, categories)]
-        formattedResult = (f"Model: {verifiedModel}"
-                           + "\nConfidence\tPredicted category:\n\n"
-                           + "\n".join(confidencePredict))
-        print("\n", formattedResult)
-    print(formattedResult)
+    formattedResult = formatResponse(response)
 
-    resultsTitle.markdown("#### Response from API")
-    thing = resultsBox.text_area('',
-                                 formattedResult,
+    thing = resultsBox.text_area('', formattedResult,
                                  max_chars=2000, height=200)
 
     if showFormattedRequest:
         JSONtitle.markdown("#### JSON formatted request")
         JSONout = JSONbox.text_area('', requestJSON, max_chars=4000,
-                                    height=300)
+                                    height=150)
