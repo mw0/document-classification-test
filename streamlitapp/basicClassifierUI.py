@@ -105,14 +105,10 @@ def invokeEndpoint(endpointName, requestJSON):
 
 #### Start building the app
 
-st.title("Document Classifier for Black Knight HeavyWater")
-st.info("blame: Mark Wilber")
+# --------------------------------- Sidebar ---------------------------------
 
 sidebarAbout = st.sidebar.empty()
 sidebarInfo = st.sidebar.empty()
-sidebarRadioHeader = st.sidebar.empty()
-sidebarRadio = st.sidebar.empty()
-sidebarJSONcheckbox = st.sidebar.empty()
 sidebarUploadHeader = st.sidebar.empty()
 sidebarUpload = st.sidebar.empty()
 sidebarUploadInfo = st.sidebar.empty()
@@ -125,28 +121,22 @@ infoStr = ("This is a quick UI for testing classifiers created for the "
            " selected after multiple hours of grid search\n\nMash on "
            "the 'Get results!' button, and document strings in the box to "
            "the right will be JSONified and shipped to a RESTful API hosted "
-           "on AWS. The model name, set by the radio button below, will "
-           "determine which model to use for inference.\n\nThe returned"
+           "on AWS. The model name, set by the radio button to the right, "
+           "will determine which model to use for inference.\n\nThe returned"
            " JSON payload is formatted and displayed.\n\n"
-           "🢣 Alternatively, see Upload File option below for batch "
+           "<hr style='border:2px; background-color:#0000D0'></hr>\n"
+           "🡇 Alternatively, see Upload File option below for batch "
            "processing (below).\n\n"
            "For details, see [my fork](https://github.com/mw0/document-"
            "classification-test) of HeavyWater's original github repo.")
 
-sidebarInfo.markdown(infoStr)
-sidebarRadioHeader.markdown('#### Which Model?')
-model = sidebarRadio.radio('',
-                           ("Naive Bayes (baseline)",
-                            "RandomForest (optimized)"))
-
-showFormattedRequest = False
-showFormattedRequest = sidebarJSONcheckbox.checkbox("Show formatted request",
-                                                    value=False)
+sidebarInfo.markdown(infoStr, unsafe_allow_html=True)
 
 # File uploader for batch requests
-sidebarUploadHeader.markdown('### Upload File (batch processing)\n\n🢣 Wait for'
-                             ' <font color="x7070ff"><u>Download results</u>'
-                             '</font> link ...', unsafe_allow_html=True)
+sidebarUploadHeader.markdown('### Upload File (batch processing)\n\n🢣 After '
+                             'submitting file, wait for '
+                             '<font color="x7070ff"><u>Download results</u>'
+                             '</font> link below ...', unsafe_allow_html=True)
 batchDataFile = sidebarUpload.file_uploader('', key='userFile')
 sidebarUploadInfo.markdown('**Format** Replace <model_name> with "NaiveBays"'
                            ' or "RandomForest":\n\n'
@@ -195,13 +185,24 @@ if batchDataFile is not None:
         sidebarUploadInfo.markdown(sidebarUploadErrorStr,
                                    unsafe_allow_html=True)
 
+# -------------------------------- Main page  --------------------------------
+
+docTitle = st.empty()
+docInfo = st.empty()
 inputTitle = st.empty()
 inputBox = st.empty()
-getButton = st.empty()
+# radioCheckbox = st.empty()
+# radioHeader, radioButtons = radioCheckbox.beta_columns(2)
+radioHeader, radioButtons = st.beta_columns(2)
+getButton, JSONcheckbox = st.beta_columns(2)
+# getButton = st.empty()
 resultsTitle = st.empty()
 resultsBox = st.empty()
 JSONtitle = st.empty()
 JSONbox = st.empty()
+
+docTitle.title("Document Classifier for Black Knight HeavyWater")
+docInfo.info("blame: Mark Wilber")
 
 # Two example documents to populate the text box:
 
@@ -373,6 +374,15 @@ inputTitle.markdown(f"#### {headingStr}\n(Note also: batch file upload in "
               "sidebar)")
 docStrings = inputBox.text_area('', defaultDoc, max_chars=12000,
                                 height=500)
+
+
+radioHeader.markdown('&nbsp;\n\n\n\n#### Which Model?')
+model = radioButtons.radio('', ("Naive Bayes (baseline)",
+                                "RandomForest (optimized)"))
+
+showFormattedRequest = False
+showFormattedRequest = JSONcheckbox.checkbox("Show formatted request",
+                                             value=False)
 
 thing = resultsBox.text_area('', '',
                              max_chars=2000, height=200)
