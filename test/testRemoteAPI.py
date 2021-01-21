@@ -76,14 +76,15 @@ def testAPI(endpointName, datafileName=None, modelName=None, sampleSize=None):
 
 if __name__ == "__main__":
     parser = ArgumentParser(description=('Test remote API with random lines '
-                                         'from specified data file.'))
+                                         'from specified data file.'
+                                         '(Note: use sample sizes ≤ 1000.)'))
     parser.add_argument('-e', action='store', dest='endpointName',
                         default='blackknightapp3-endpoint')
     parser.add_argument('-d', action='store', dest='datafileName',
                         default='../data/shuffled-full-set-hashed.csv')
     parser.add_argument('-m', action='store', dest='modelName',
                         default='NaiveBayes')
-    parser.add_argument('-s', action='store', dest = 'sampleSize',
+    parser.add_argument('-s', action='store', dest='sampleSize',
                         default='400')
 
     results = parser.parse_args()
