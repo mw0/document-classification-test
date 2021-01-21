@@ -5,6 +5,7 @@ __pycache__/
 */__pycache__/
 */.ipynb_checkpoints
 model/*
+test/shuffled-full-set-hashed.csv
 data/shuffled-full-set-hashed.csv
 .~lock.*#
 **/log/*.log
